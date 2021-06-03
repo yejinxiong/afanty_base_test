@@ -4,8 +4,11 @@ import com.afanty.base.test.lamda.entity.Employee;
 import com.afanty.base.test.lamda.entity.RemedySheet;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,18 +26,20 @@ import java.util.stream.Collectors;
 //@RunWith(SpringRunner.class)
 public class CommonTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(CommonTest.class);
+
     /**
      * 生成32位主键ID-数字
      */
     @Test
-    public void generateId(){
+    public void generateId() {
         for (int i = 1; i < 35; i++) {
             System.out.println(RandomStringUtils.randomNumeric(32));
         }
     }
 
     @Test
-    public void generateId2(){
+    public void generateId2() {
         long now = System.currentTimeMillis();
         for (int i = 0; i < 35; i++) {
             System.out.println(now);
@@ -46,7 +51,7 @@ public class CommonTest {
      * 生成32位主键ID-数字字母组合
      */
     @Test
-    public void generateId3(){
+    public void generateId3() {
         UUID uuid = UUID.randomUUID();
         String id = uuid.toString().replace("-", "");
         System.out.println(id);
@@ -56,7 +61,7 @@ public class CommonTest {
      * 生成指定时间
      */
     @Test
-    public void localDatetime () {
+    public void localDatetime() {
         LocalDateTime assginTime = LocalDateTime.of(2021, 5, 5, 23, 49, 57);
         System.out.println(assginTime);
     }
@@ -154,6 +159,7 @@ public class CommonTest {
 
     /**
      * 随机分配
+     *
      * @throws InterruptedException
      */
     @Test
@@ -261,12 +267,91 @@ public class CommonTest {
         System.out.println(collect);
     }
 
+    /**
+     * 通过不存在的key获取value
+     */
     @Test
     public void testMap() {
         Map<String, String> map = new HashMap<>();
         map.put("01", "2678");
         System.out.println(map.get("02"));
 
+    }
+
+    /**
+     *Calendar add()方法的使用
+     */
+    @Test
+    public void testCalendar() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Calendar c0 = Calendar.getInstance();
+        c0.setTime(sdf.parse("2021-06-03 23:10:00"));
+        System.out.println("指定日期：" + sdf.format(c0.getTime()));
+
+        Calendar c1 = Calendar.getInstance();
+        System.out.println("当前日期：" + sdf.format(c1.getTime()));
+
+        Calendar c2 = Calendar.getInstance();
+        c2.add(Calendar.DATE, 10);
+        System.out.println("10天后：" + sdf.format(c2.getTime()));
+
+        Calendar c3 = Calendar.getInstance();
+        c3.add(Calendar.MONTH, -2);
+        System.out.println("2个月前：" + sdf.format(c3.getTime()));
+
+        Calendar c4 = Calendar.getInstance();
+        c4.add(Calendar.YEAR, -5);
+        System.out.println("5年前：" + sdf.format(c4.getTime()));
+
+    }
+
+    /**
+     * 根据开始/结束时间，计算跨越的月份
+     */
+    @Test
+    public void getMonthList(){
+        String startDate = "2021-04-01 13:23:51";
+        String endDate = "2021-06-03 20:32:13";
+        List<Map<String, String>> list = new ArrayList<>();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+        try {
+            c1.setTime(sdf1.parse(startDate));
+            c2.setTime(sdf1.parse(endDate));
+            // 获取结束时间 与 开始时间 相差的年数
+            int year = c2.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
+            // 获取结束时间 与 开始时间 相差的月数
+            int month = c2.get(Calendar.MONTH) + year * 12 - c1.get(Calendar.MONTH);
+            for (int i = 0; i <= month; i++) {
+                Map<String, String> map = new HashMap<>();
+                // 设置开始时间
+                c1.setTime(sdf1.parse(startDate));
+                // 在开始时间月份的基础上增加，依次往后推算
+                c1.add(Calendar.MONTH, i);
+                if (i == 0) {
+                    map.put("startTime", sdf1.format(c1.getTime()));
+                } else {
+                    map.put("startTime", sdf2.format(c1.getTime()));
+                }
+                if (i == month) {
+                    map.put("endTime", endDate);
+                } else {
+                    // 获取当月最大天数
+                    int maxDay = c1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    // 填充当月最后一天
+                    c1.set(Calendar.DAY_OF_MONTH , maxDay);
+                    map.put("endTime", sdf3.format(c1.getTime()));
+                }
+                list.add(map);
+            }
+        } catch (Exception e) {
+            logger.error("日期转换异常：{}", e.getMessage());
+        }
+        System.out.println(list);
     }
 
 }
