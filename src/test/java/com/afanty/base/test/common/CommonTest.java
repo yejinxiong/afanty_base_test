@@ -27,14 +27,14 @@ public class CommonTest {
      * 生成32位主键ID-数字
      */
     @Test
-    void generateId(){
+    public void generateId(){
         for (int i = 1; i < 35; i++) {
             System.out.println(RandomStringUtils.randomNumeric(32));
         }
     }
 
     @Test
-    void generateId2(){
+    public void generateId2(){
         long now = System.currentTimeMillis();
         for (int i = 0; i < 35; i++) {
             System.out.println(now);
@@ -46,7 +46,7 @@ public class CommonTest {
      * 生成32位主键ID-数字字母组合
      */
     @Test
-    void generateId3(){
+    public void generateId3(){
         UUID uuid = UUID.randomUUID();
         String id = uuid.toString().replace("-", "");
         System.out.println(id);
