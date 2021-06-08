@@ -11,7 +11,15 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -279,7 +287,7 @@ public class CommonTest {
     }
 
     /**
-     *Calendar add()方法的使用
+     * Calendar add()方法的使用
      */
     @Test
     public void testCalendar() throws ParseException {
@@ -310,7 +318,7 @@ public class CommonTest {
      * 根据开始/结束时间，计算跨越的月份
      */
     @Test
-    public void getMonthList(){
+    public void getMonthList() {
         String startDate = "2021-04-01 13:23:51";
         String endDate = "2021-06-03 20:32:13";
         List<Map<String, String>> list = new ArrayList<>();
@@ -343,7 +351,7 @@ public class CommonTest {
                     // 获取当月最大天数
                     int maxDay = c1.getActualMaximum(Calendar.DAY_OF_MONTH);
                     // 填充当月最后一天
-                    c1.set(Calendar.DAY_OF_MONTH , maxDay);
+                    c1.set(Calendar.DAY_OF_MONTH, maxDay);
                     map.put("endTime", sdf3.format(c1.getTime()));
                 }
                 list.add(map);
@@ -352,6 +360,16 @@ public class CommonTest {
             logger.error("日期转换异常：{}", e.getMessage());
         }
         System.out.println(list);
+    }
+
+    /**
+     * 请求流水号：yyyyMMddHHmmssSSS+6位数字随机数
+     */
+    @Test
+    public void transid() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        String transid = sdf.format(new Date()) + String.valueOf(1000000 + (int) (Math.random() * 1000000.0D)).substring(1);
+        System.out.println(transid);
     }
 
 }
