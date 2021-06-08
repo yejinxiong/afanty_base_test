@@ -2,6 +2,7 @@ package com.afanty.base.test.common;
 
 import com.afanty.base.test.lamda.entity.Employee;
 import com.afanty.base.test.lamda.entity.RemedySheet;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -370,6 +371,19 @@ public class CommonTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         String transid = sdf.format(new Date()) + String.valueOf(1000000 + (int) (Math.random() * 1000000.0D)).substring(1);
         System.out.println(transid);
+    }
+
+    /**
+     * 解析json字符串：获取什么样的数据会报错
+     */
+    @Test
+    public void parseJson(){
+        String respJson = "{\"UNI_BSS_HEAD\":{}}";
+        JSONObject responseObject = JSONObject.parseObject(respJson); // 返回：JSONObject
+        JSONObject uniBssHead = responseObject.getJSONObject("UNI_BSS_HEAD"); // 返回：JSONObject size=0
+        JSONObject data = uniBssHead.getJSONObject("DATA"); // 返回：null
+        String values = data.getString("values"); // 异常
+        System.out.println(values);
     }
 
 }
