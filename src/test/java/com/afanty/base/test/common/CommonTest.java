@@ -377,13 +377,32 @@ public class CommonTest {
      * 解析json字符串：获取什么样的数据会报错
      */
     @Test
-    public void parseJson(){
+    public void parseJson() {
         String respJson = "{\"UNI_BSS_HEAD\":{}}";
         JSONObject responseObject = JSONObject.parseObject(respJson); // 返回：JSONObject
         JSONObject uniBssHead = responseObject.getJSONObject("UNI_BSS_HEAD"); // 返回：JSONObject size=0
         JSONObject data = uniBssHead.getJSONObject("DATA"); // 返回：null
         String values = data.getString("values"); // 异常
         System.out.println(values);
+    }
+
+    /**
+     * 解析并获取json字符串中的list（该list的泛型没有对应的实体）
+     */
+    @Test
+    public void parseJsonArray() {
+        String respJson = "{\"RSP\":{\"DATA\":{\"values\":[{\"codeDesc\":\"待派送\",\"codeValue\":\"1\"},{\"codeDesc\":\"待处理\",\"codeValue\":\"2\"}]}}}";
+        JSONObject responseObject = JSONObject.parseObject(respJson); // 返回：JSONObject
+        JSONObject data = responseObject.getJSONObject("RSP").getJSONObject("DATA");
+        if (null != data && data.size() > 0) {
+            List<HashMap> values = JSONObject.parseArray(data.getString("values"), HashMap.class);
+            values.forEach(value -> {
+                JSONObject jsonObject = new JSONObject(value);
+                String codeValue = jsonObject.getString("codeValue");
+                String codeDesc = jsonObject.getString("codeDesc");
+                System.out.println(codeValue + "=>" + codeDesc);
+            });
+        }
     }
 
 }
