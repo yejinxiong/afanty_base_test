@@ -12,15 +12,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -393,9 +385,26 @@ public class CommonTest {
     public void parseJsonArray() {
         String respJson = "{\"RSP\":{\"DATA\":{\"values\":[{\"codeDesc\":\"待派送\",\"codeValue\":\"1\"},{\"codeDesc\":\"待处理\",\"codeValue\":\"2\"}]}}}";
         JSONObject responseObject = JSONObject.parseObject(respJson); // 返回：JSONObject
-        JSONObject data = responseObject.getJSONObject("RSP").getJSONObject("DATA");
-        if (null != data && data.size() > 0) {
-            List<HashMap> values = JSONObject.parseArray(data.getString("values"), HashMap.class);
+
+        // 非空判断一
+//        JSONObject data = responseObject.getJSONObject("RSP").getJSONObject("DATA");
+//        if (null != data && data.size() > 0) {
+//            List<HashMap> values = JSONObject.parseArray(data.getString("values"), HashMap.class);
+//            values.forEach(value -> {
+//                JSONObject jsonObject = new JSONObject(value);
+//                String codeValue = jsonObject.getString("codeValue");
+//                String codeDesc = jsonObject.getString("codeDesc");
+//                System.out.println(codeValue + "=>" + codeDesc);
+//            });
+//        }
+
+        // 非空判断二
+        List<HashMap> values = Optional.ofNullable(responseObject)
+                .map(response -> response.getJSONObject("RSP"))
+                .map(rsp -> rsp.getJSONObject("DATA"))
+                .map(data -> JSONObject.parseArray(data.getString("values"), HashMap.class))
+                .orElse(null);
+        if (null != values && values.size() > 0) {
             values.forEach(value -> {
                 JSONObject jsonObject = new JSONObject(value);
                 String codeValue = jsonObject.getString("codeValue");
