@@ -3,6 +3,7 @@ package com.afanty.base.test.common;
 import com.afanty.base.test.lamda.entity.Employee;
 import com.afanty.base.test.lamda.entity.RemedySheet;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -403,15 +404,12 @@ public class CommonTest {
                 .map(response -> response.getJSONObject("RSP"))
                 .map(rsp -> rsp.getJSONObject("DATA"))
                 .map(data -> JSONObject.parseArray(data.getString("values"), HashMap.class))
-                .orElse(null);
-        if (null != values && values.size() > 0) {
-            values.forEach(value -> {
-                JSONObject jsonObject = new JSONObject(value);
-                String codeValue = jsonObject.getString("codeValue");
-                String codeDesc = jsonObject.getString("codeDesc");
-                System.out.println(codeValue + "=>" + codeDesc);
-            });
-        }
+                .orElseGet(ArrayList::new);
+        values.forEach(map -> {
+            String codeValue = MapUtils.getString(map, "codeValue");
+            String codeDesc = MapUtils.getString(map, "codeDesc");
+            System.out.println(codeValue + "=>" + codeDesc);
+        });
     }
 
 }
