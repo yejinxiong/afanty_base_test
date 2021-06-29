@@ -357,6 +357,33 @@ public class CommonTest {
     }
 
     /**
+     * 计算两日期之间天数
+     */
+    @Test
+    public void calcBetweenDays() {
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 日期字符串
+        String startDateStr = "2021-05-29 17:07:07";
+        String endDateStr = "2021-06-02 00:00:00";
+        try {
+            // 获取日期
+            Date start = sdf3.parse(sdf1.format(sdf3.parse(startDateStr)));
+            Date end = sdf3.parse(sdf2.format(sdf3.parse(endDateStr)));
+            // 获取时间戳
+            long s = start.getTime();
+            long e = end.getTime();
+            // 计算天数
+            long one = 1000L * 3600L * 24L;
+            long betweenDays =  (e - s + one) / one;
+            System.out.println("天数：" + betweenDays);
+        } catch (ParseException e) {
+            logger.error("日期转换异常：{}", e.getMessage());
+        }
+    }
+
+    /**
      * 请求流水号：yyyyMMddHHmmssSSS+6位数字随机数
      */
     @Test
