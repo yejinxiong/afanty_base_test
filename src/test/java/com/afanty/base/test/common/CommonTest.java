@@ -270,6 +270,33 @@ public class CommonTest {
     }
 
     /**
+     * 使用Stream流 根据实体属性 去重
+     */
+    @Test
+    public void testDistinct() {
+        List<Employee> listUser = new ArrayList<Employee>(){
+            {
+                this.add(new Employee("张三", 23, 5000.00));
+                this.add(new Employee("张三", 18, 4000.00));
+                this.add(new Employee("张三", 23, 6000.00));
+                this.add(new Employee("李四", 25, 7000.00));
+            }
+        };
+        // 1. 根据多个属性去重“姓名-年龄”
+        List<Employee> newList1 = listUser.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(e -> e.getName() + "-" + e.getAge()))), ArrayList::new));
+        System.out.println("多字段去重：" + newList1.toString());
+
+        // 2. 根据单个属性去重“姓名”
+        List<Employee> newList2 = listUser.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Employee::getName))), ArrayList::new));
+        System.out.println("单字段去重：" + newList2.toString());
+
+        // 3. 获取某属性值，并对属性值去重
+        List<String> nameList = listUser.stream().map(Employee::getName).distinct().collect(Collectors.toList());
+        System.out.println("获取name并去重：" + nameList.toString());
+
+    }
+
+    /**
      * 通过不存在的key获取value
      */
     @Test
