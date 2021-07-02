@@ -274,7 +274,7 @@ public class CommonTest {
      */
     @Test
     public void testDistinct() {
-        List<Employee> listUser = new ArrayList<Employee>(){
+        List<Employee> listUser = new ArrayList<Employee>() {
             {
                 this.add(new Employee("张三", 23, 5000.00));
                 this.add(new Employee("张三", 18, 4000.00));
@@ -381,6 +381,55 @@ public class CommonTest {
             logger.error("日期转换异常：{}", e.getMessage());
         }
         System.out.println(list);
+    }
+
+    /**
+     * 根据时间（Date）筛选list数据
+     */
+    @Test
+    public void filterByDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<Date> list = new ArrayList<>();
+        Calendar c1 = Calendar.getInstance();
+        c1.set(2021, Calendar.JULY, 1, 18, 20, 0);
+        Date time1 = c1.getTime();
+        list.add(time1);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.set(2021, Calendar.JUNE, 30, 18, 20, 0);
+        Date time2 = c2.getTime();
+        list.add(time2);
+
+        Calendar c3 = Calendar.getInstance();
+        c3.set(2021, Calendar.JUNE, 29, 18, 20, 0);
+        Date time3 = c3.getTime();
+        list.add(time3);
+
+        Calendar c4 = Calendar.getInstance();
+        c4.set(2021, Calendar.JUNE, 28, 18, 20, 0);
+        Date time4 = c4.getTime();
+        list.add(time4);
+
+        Calendar c5 = Calendar.getInstance();
+        c5.set(2021, Calendar.JUNE, 27, 18, 20, 0);
+        Date time5 = c5.getTime();
+        list.add(time5);
+
+        list.forEach(d -> System.out.println(sdf.format(d)));
+        System.out.println("---------------------------------------------");
+
+        Calendar c6 = Calendar.getInstance();
+        c6.set(2021, Calendar.JULY, 1, 23, 59, 59);
+        Date yesterday = c6.getTime();
+
+        c6.add(Calendar.DATE, -3);
+        c6.set(c6.get(Calendar.YEAR), c6.get(Calendar.MONTH), c6.get(Calendar.DATE), 0, 0, 0);
+        Date ago4 = c6.getTime();
+
+        // 时间条件筛选
+        List<Date> agoList4 = list.stream().filter(d -> d.after(ago4) && d.before(yesterday)).collect(Collectors.toList());
+        agoList4.forEach(d -> System.out.println(sdf.format(d)));
+
     }
 
     /**
