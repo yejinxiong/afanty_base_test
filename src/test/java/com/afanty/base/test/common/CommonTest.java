@@ -384,6 +384,40 @@ public class CommonTest {
     }
 
     /**
+     * 获取连续日期：由近及远
+     */
+    @Test
+    public void runningDays() {
+        List<String> list = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String[] arr = {"2021-05-31", "2021-06-01", "2021-06-03", "2021-06-04", "2021-06-05", "2021-06-06", "2021-06-07", "2021-06-08"};
+        List<String> list1 = Arrays.asList(arr);
+        System.out.println("排序之前" + list1);
+        List<String> dateList = Arrays.stream(arr).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        System.out.println("排序之后" + dateList);
+        Calendar calendar = Calendar.getInstance();
+        try {
+            for (int i = 0; i < dateList.size() - 1; i++) {
+                list.add(dateList.get(i));
+                calendar.setTime(sdf.parse(dateList.get(i)));
+                calendar.add(Calendar.DATE, -1);
+                String preDay = sdf.format(calendar.getTime());
+                if (preDay.equals(dateList.get(i + 1))) {
+                    list.add(dateList.get(i + 1));
+                } else {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("日期转换异常：{}", e.getMessage());
+        }
+        System.out.println("去重之前" + list);
+        // 去重
+        list = list.stream().distinct().collect(Collectors.toList());
+        System.out.println("去重之后" + list);
+    }
+
+    /**
      * 根据时间（Date）筛选list数据
      */
     @Test
