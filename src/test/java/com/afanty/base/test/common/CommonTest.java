@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -308,116 +307,6 @@ public class CommonTest {
     }
 
     /**
-     * Calendar add()方法的使用
-     */
-    @Test
-    public void testCalendar() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        Calendar c0 = Calendar.getInstance();
-        c0.setTime(sdf.parse("2021-06-03 23:10:00"));
-        System.out.println("指定日期：" + sdf.format(c0.getTime()));
-
-        Calendar c1 = Calendar.getInstance();
-        System.out.println("当前日期：" + sdf.format(c1.getTime()));
-
-        Calendar c2 = Calendar.getInstance();
-        c2.add(Calendar.DATE, 10);
-        System.out.println("10天后：" + sdf.format(c2.getTime()));
-
-        Calendar c3 = Calendar.getInstance();
-        c3.add(Calendar.MONTH, -2);
-        System.out.println("2个月前：" + sdf.format(c3.getTime()));
-
-        Calendar c4 = Calendar.getInstance();
-        c4.add(Calendar.YEAR, -5);
-        System.out.println("5年前：" + sdf.format(c4.getTime()));
-
-    }
-
-    /**
-     * 根据开始/结束时间，计算跨越的月份
-     */
-    @Test
-    public void getMonthList() {
-        String startDate = "2021-04-01 13:23:51";
-        String endDate = "2021-06-03 20:32:13";
-        List<Map<String, String>> list = new ArrayList<>();
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
-        Calendar c1 = Calendar.getInstance();
-        Calendar c2 = Calendar.getInstance();
-        try {
-            c1.setTime(sdf1.parse(startDate));
-            c2.setTime(sdf1.parse(endDate));
-            // 获取结束时间 与 开始时间 相差的年数
-            int year = c2.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
-            // 获取结束时间 与 开始时间 相差的月数
-            int month = c2.get(Calendar.MONTH) + year * 12 - c1.get(Calendar.MONTH);
-            for (int i = 0; i <= month; i++) {
-                Map<String, String> map = new HashMap<>();
-                // 设置开始时间
-                c1.setTime(sdf1.parse(startDate));
-                // 在开始时间月份的基础上增加，依次往后推算
-                c1.add(Calendar.MONTH, i);
-                if (i == 0) {
-                    map.put("startTime", sdf1.format(c1.getTime()));
-                } else {
-                    map.put("startTime", sdf2.format(c1.getTime()));
-                }
-                if (i == month) {
-                    map.put("endTime", endDate);
-                } else {
-                    // 获取当月最大天数
-                    int maxDay = c1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    // 填充当月最后一天
-                    c1.set(Calendar.DAY_OF_MONTH, maxDay);
-                    map.put("endTime", sdf3.format(c1.getTime()));
-                }
-                list.add(map);
-            }
-        } catch (Exception e) {
-            logger.error("日期转换异常：{}", e.getMessage());
-        }
-        System.out.println(list);
-    }
-
-    /**
-     * 获取连续日期：由近及远
-     */
-    @Test
-    public void runningDays() {
-        List<String> list = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String[] arr = {"2021-05-31", "2021-06-01", "2021-06-03", "2021-06-04", "2021-06-05", "2021-06-06", "2021-06-07", "2021-06-08"};
-        List<String> list1 = Arrays.asList(arr);
-        System.out.println("排序之前" + list1);
-        List<String> dateList = Arrays.stream(arr).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-        System.out.println("排序之后" + dateList);
-        Calendar calendar = Calendar.getInstance();
-        try {
-            for (int i = 0; i < dateList.size() - 1; i++) {
-                list.add(dateList.get(i));
-                calendar.setTime(sdf.parse(dateList.get(i)));
-                calendar.add(Calendar.DATE, -1);
-                String preDay = sdf.format(calendar.getTime());
-                if (preDay.equals(dateList.get(i + 1))) {
-                    list.add(dateList.get(i + 1));
-                } else {
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            logger.error("日期转换异常：{}", e.getMessage());
-        }
-        System.out.println("去重之前" + list);
-        // 去重
-        list = list.stream().distinct().collect(Collectors.toList());
-        System.out.println("去重之后" + list);
-    }
-
-    /**
      * 根据时间（Date）筛选list数据
      */
     @Test
@@ -464,33 +353,6 @@ public class CommonTest {
         List<Date> agoList4 = list.stream().filter(d -> d.after(ago4) && d.before(yesterday)).collect(Collectors.toList());
         agoList4.forEach(d -> System.out.println(sdf.format(d)));
 
-    }
-
-    /**
-     * 计算两日期之间天数
-     */
-    @Test
-    public void calcBetweenDays() {
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
-        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // 日期字符串
-        String startDateStr = "2021-05-29 17:07:07";
-        String endDateStr = "2021-06-02 00:00:00";
-        try {
-            // 获取日期
-            Date start = sdf3.parse(sdf1.format(sdf3.parse(startDateStr)));
-            Date end = sdf3.parse(sdf2.format(sdf3.parse(endDateStr)));
-            // 获取时间戳
-            long s = start.getTime();
-            long e = end.getTime();
-            // 计算天数
-            long one = 1000L * 3600L * 24L;
-            long betweenDays =  (e - s + one) / one;
-            System.out.println("天数：" + betweenDays);
-        } catch (ParseException e) {
-            logger.error("日期转换异常：{}", e.getMessage());
-        }
     }
 
     /**
