@@ -302,7 +302,11 @@ public class LocalDateTest {
             LocalDateTime minusDays = localDateTime.minusDays(10);
             System.out.println("10天前：" + dateTimeFormatter.format(minusDays));
             LocalDateTime minus4 = localDateTime.minus(10, ChronoUnit.DAYS);
-            System.out.println("10天前：" + dateTimeFormatter.format(minus4) + "\n");
+            System.out.println("10天前：" + dateTimeFormatter.format(minus4));
+            LocalDateTime min = localDateTime.minusDays(10).with(LocalTime.MIN);
+            System.out.println("10天前00:00:00：" + dateTimeFormatter.format(min));
+            LocalDateTime max = localDateTime.minusDays(10).with(LocalTime.MAX);
+            System.out.println("10天前23:59:59：" + dateTimeFormatter.format(max) + "\n");
 
             LocalDateTime plusMonths = localDateTime.plusMonths(2L);
             System.out.println("2个月后：" + dateTimeFormatter.format(plusMonths));
