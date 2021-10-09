@@ -30,7 +30,7 @@ public class FileCharOutput {
 //            // 2.1. 直接通过文件字符输出流写入
 //            for (String content : contentArr) {
 //                fw.write(content);
-//                fw.write(AfantyConstant.NEXT_LINE);
+//                fw.write(EncodeConstant.NEXT_LINE);
 //                fw.flush();
 //            }
 

@@ -29,12 +29,12 @@ public interface FTPServerInterface {
     /**
      * 上传文件
      *
-     * @param File
+     * @param file
      * @param dst
      * @return
      * @throws Exception
      */
-    public boolean upload(File File, String dst) throws Exception;
+    public boolean upload(File file, String dst) throws Exception;
 
     /**
      * 判断目录是否存在

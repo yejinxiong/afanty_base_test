@@ -1,6 +1,6 @@
 package com.afanty.base.test.io.bytestream;
 
-import com.afanty.base.test.utils.AfantyConstant;
+import com.afanty.base.test.common.contanst.EncodeConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +34,7 @@ public class BufferedOutput {
             List<String> list = data();
             for (String s : list) {
                 bos.write(s.getBytes(StandardCharsets.UTF_8)); // 写入8k字节缓冲区
-                bos.write(AfantyConstant.NEXT_LINE.getBytes()); // 换行
+                bos.write(EncodeConstant.NEXT_LINE.getBytes()); // 换行
                 bos.flush(); // 刷新到硬盘
             }
             logger.info("执行成功");

@@ -35,8 +35,8 @@ class Mirror {
 class Makeup implements Runnable {
 
     // 需要的资源只有一份，用static来保证只有一份
-    private static final Lipstick lipstick = new Lipstick();
-    private static final Mirror mirror = new Mirror();
+    private static final Lipstick LIPSTICK = new Lipstick();
+    private static final Mirror MIRROR = new Mirror();
 
     private int choice; // 选择
     private String userName;    // 使用此化妆品的人
@@ -59,7 +59,7 @@ class Makeup implements Runnable {
     private void makeup() throws Exception {
         switch (choice) {
             case 0:
-                synchronized (lipstick) {
+                synchronized (LIPSTICK) {
                     System.out.println("\"" + this.userName + "\"获得口红的锁");
                     Thread.sleep(1000);
                     /**
@@ -70,12 +70,12 @@ class Makeup implements Runnable {
 //                        System.out.println("\"" + this.userName + "\"获得镜子的锁");
 //                    }
                 }
-                synchronized (mirror) {
+                synchronized (MIRROR) {
                     System.out.println("\"" + this.userName + "\"获得镜子的锁");
                 }
                 break;
             case 1:
-                synchronized (mirror) {
+                synchronized (MIRROR) {
                     System.out.println("\"" + this.userName + "\"获得镜子的锁");
                     Thread.sleep(1000);
                     /**
@@ -86,9 +86,11 @@ class Makeup implements Runnable {
 //                        System.out.println("\"" + this.userName + "\"获得口红的锁");
 //                    }
                 }
-                synchronized (lipstick) {
+                synchronized (LIPSTICK) {
                     System.out.println("\"" + this.userName + "\"获得口红的锁");
                 }
+                break;
+            default:
                 break;
         }
     }

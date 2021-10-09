@@ -9,20 +9,8 @@ import java.util.Map;
 
 public class FTPManager {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private static Map<String, Boolean> useMap = new HashMap<String, Boolean>();
-
-    /**
-     * 判断FTP连接是否还有线程使用【暂未使用】
-     *
-     * @return
-     */
-    public boolean isUseConn() {
-        if (useMap.size() <= 0) {
-            return false;
-        }
-        return true;
-    }
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     /**
      * 线程使用完毕，将当前FTP连接状态置空【暂未使用】
@@ -40,6 +28,18 @@ public class FTPManager {
      */
     public synchronized static void addUseConn(String threadName) {
         useMap.put(threadName, true);
+    }
+
+    /**
+     * 判断FTP连接是否还有线程使用【暂未使用】
+     *
+     * @return
+     */
+    public boolean isUseConn() {
+        if (useMap.size() <= 0) {
+            return false;
+        }
+        return true;
     }
 
     /**

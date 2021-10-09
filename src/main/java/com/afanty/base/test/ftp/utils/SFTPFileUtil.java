@@ -90,6 +90,7 @@ public class SFTPFileUtil implements FTPServerInterface {
      * @return
      * @throws Exception
      */
+    @Override
     public boolean download(String ftpFile, String saveLocalFile) throws Exception {
         if (sftpClient == null) {
             throw new Exception("SFTP客户端未连接或创建连接出错");
@@ -122,6 +123,7 @@ public class SFTPFileUtil implements FTPServerInterface {
      * @return
      * @throws Exception
      */
+    @Override
     public boolean fastDownload(String ftpFile, String saveLocalFile) throws Exception {
         boolean b = download(ftpFile, saveLocalFile);
         try {
@@ -136,6 +138,7 @@ public class SFTPFileUtil implements FTPServerInterface {
      *
      * @throws IOException
      */
+    @Override
     public void close() throws IOException {
         if (sftpClient != null) {
             sftpClient.quit();
@@ -157,8 +160,9 @@ public class SFTPFileUtil implements FTPServerInterface {
      */
     @SuppressWarnings("unchecked")
     public List<String> listDirectories(String path) throws Exception {
-        if (sftpClient == null)
+        if (sftpClient == null) {
             throw new Exception("SFTP客户端未连接或创建连接出错");
+        }
         Vector<String> vts = sftpClient.ls(path);
         List<String> list = new ArrayList<String>();
         for (String ftpFile : vts) {
@@ -170,17 +174,19 @@ public class SFTPFileUtil implements FTPServerInterface {
     /**
      * 上传文件
      *
-     * @param File
+     * @param file
      * @param dst
      * @return
      * @throws Exception
      */
-    public boolean upload(File File, String dst) throws Exception {
-        if (sftpClient == null)
+    @Override
+    public boolean upload(File file, String dst) throws Exception {
+        if (sftpClient == null) {
             throw new Exception("SFTP客户端未连接或创建连接出错");
+        }
         FileInputStream is = null;
         try {
-            is = new FileInputStream(File);
+            is = new FileInputStream(file);
             sftpClient.put(is, dst);
         } catch (Exception e) {
             throw new Exception("SFTP客户端上传文件出错");
@@ -200,9 +206,11 @@ public class SFTPFileUtil implements FTPServerInterface {
      * @return
      * @throws Exception
      */
+    @Override
     public boolean isExistsDir(String path) throws Exception {
-        if (sftpClient == null)
+        if (sftpClient == null) {
             throw new Exception("SFTP客户端未连接或创建连接出错");
+        }
         try {
             sftpClient.ls(path);
         } catch (SftpException se) {
@@ -218,6 +226,7 @@ public class SFTPFileUtil implements FTPServerInterface {
      * @param path 路径
      * @return 列表
      */
+    @Override
     @SuppressWarnings("rawtypes")
     public List<String> listFiles(String path) throws Exception {
         final List<String> list = new ArrayList<>();

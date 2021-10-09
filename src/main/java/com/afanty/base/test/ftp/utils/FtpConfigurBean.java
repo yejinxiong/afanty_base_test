@@ -17,7 +17,7 @@ public class FtpConfigurBean {
     }
 
     public FtpConfigurBean(String info) throws Exception {
-        if (info != null && !info.trim().equals("")) {
+        if (info != null && !"".equals(info.trim())) {
             String[] infos = info.split("\\|");
             if (infos.length != 6) {
                 throw new Exception("ftp信息必须为6个，info:" + info);

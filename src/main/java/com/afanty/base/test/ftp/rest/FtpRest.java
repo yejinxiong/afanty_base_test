@@ -1,10 +1,10 @@
 package com.afanty.base.test.ftp.rest;
 
+import com.afanty.base.test.common.web.ResponseResult;
+import com.afanty.base.test.common.web.StatusCode;
 import com.afanty.base.test.ftp.entity.Contact;
 import com.afanty.base.test.ftp.entity.ContactDir;
 import com.afanty.base.test.ftp.service.FtpServiceImpl;
-import com.afanty.base.test.utils.ResponseResult;
-import com.afanty.base.test.utils.StatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -48,7 +48,7 @@ import java.util.Map;
         @ApiResponse(code = 500, message = "服务器出现异常")})
 public class FtpRest {
 
-    private static final Logger log = LoggerFactory.getLogger(FtpRest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FtpRest.class);
 
     @Resource(name = "ftpService")
     private FtpServiceImpl ftpService;
@@ -76,7 +76,7 @@ public class FtpRest {
 
         String path = request.getSession().getServletContext().getRealPath("/") + File.separator + saveDir;
         File mp3File = new File(path + File.separator + contactId + ".wav");
-        log.info("查找录音路径：" + mp3File.getAbsolutePath());
+        LOGGER.info("查找录音路径：" + mp3File.getAbsolutePath());
         ContactDir contactDir;
         if (mp3File.exists() && mp3File.length() > 0) {
             contactDir = new ContactDir();
@@ -125,15 +125,34 @@ public class FtpRest {
         response.setContentType("multipart/form-data");
         response.setHeader("Content-disposition", "attachment; filename=" + fileName);
         ServletOutputStream out = response.getOutputStream();
-        BufferedInputStream bis = new BufferedInputStream(in);
-        BufferedOutputStream bos = new BufferedOutputStream(out);
-        byte[] buff = new byte[2048];
-        int bytesRead;
-        while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
-            bos.write(buff, 0, bytesRead);
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+        try {
+            bis = new BufferedInputStream(in);
+            bos = new BufferedOutputStream(out);
+            byte[] buff = new byte[2048];
+            int bytesRead;
+            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                bos.write(buff, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            LOGGER.error("流形式下载文件：{}", e.getMessage());
+        } finally {
+            if (null != bis) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    LOGGER.error("缓冲输入流关闭异常：{}", e.getMessage());
+                }
+            }
+            if (null != bos) {
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    LOGGER.error("缓冲输出流关闭异常：{}", e.getMessage());
+                }
+            }
         }
-        bis.close();
-        bos.close();
     }
 
 }

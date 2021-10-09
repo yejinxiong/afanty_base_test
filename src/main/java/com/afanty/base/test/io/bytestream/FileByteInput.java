@@ -1,6 +1,6 @@
 package com.afanty.base.test.io.bytestream;
 
-import com.afanty.base.test.utils.AfantyConstant;
+import com.afanty.base.test.common.contanst.EncodeConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class FileByteInput {
         // 方案二：使用common-io的FileUtils工具类
 //        try {
 //            File file = new File("C:\\Users\\yejx\\Desktop\\yqrd.txt");
-//            List lines = FileUtils.readLines(file, AfantyConstant.ENCODE_GBK);
+//            List lines = FileUtils.readLines(file, EncodeConstant.ENCODE_GBK);
 //            if (lines.size() > 0) {
 //                for (Object line : lines) {
 //                    System.out.println(line.toString());
@@ -63,7 +63,7 @@ public class FileByteInput {
 //            }
 
             // 3. 从字节缓冲区读取：一次读取一行
-            InputStreamReader reader = new InputStreamReader(fis, AfantyConstant.ENCODE_GBK);
+            InputStreamReader reader = new InputStreamReader(fis, EncodeConstant.ENCODE_GBK);
             BufferedReader br = new BufferedReader(reader);
             String line;
             while ((line = br.readLine()) != null) {

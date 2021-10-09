@@ -1,6 +1,6 @@
 package com.afanty.base.test.common;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class CalenderTest {
      * 获取当前时间
      */
     @Test
-    public void getCurrent() {
+    private void getCurrent() {
         Calendar calendar = Calendar.getInstance();
         try {
             System.out.println("当前日期时间：" + sdfDateTime.format(calendar.getTime()));
@@ -50,7 +50,7 @@ public class CalenderTest {
      * 日期/时间转字符串
      */
     @Test
-    public void date2String() {
+    private void date2String() {
         Calendar calendar = Calendar.getInstance();
         try {
             System.out.println("当前时间对象：" + calendar.getTime());
@@ -69,7 +69,7 @@ public class CalenderTest {
      * 字符串转日期/时间
      */
     @Test
-    public void string2Date() {
+    private void string2Date() {
         try {
             Date time = sdfTime.parse("23:37:25");
             System.out.println("时间转Date：" + time);
@@ -89,7 +89,7 @@ public class CalenderTest {
      * Date转Calendar
      */
     @Test
-    public void date2Calendar() {
+    private void date2Calendar() {
         Calendar calendar = Calendar.getInstance();
         try {
             Date date = sdfDateTime.parse("2021-07-29 23:37:25");
@@ -103,7 +103,7 @@ public class CalenderTest {
      * Calendar转Date
      */
     @Test
-    public void calendar2Date() {
+    private void calendar2Date() {
         Calendar calendar = Calendar.getInstance();
         try {
             calendar.getTime();
@@ -116,7 +116,7 @@ public class CalenderTest {
      * 指定日期/时间：具根据体年月日时分秒
      */
     @Test
-    public void specify() {
+    private void specify() {
         try {
             Calendar calendar = Calendar.getInstance();
             System.out.println("当前日期时间：" + sdfDateTime.format(calendar.getTime()));
@@ -143,7 +143,7 @@ public class CalenderTest {
      * 日期/时间偏移
      */
     @Test
-    public void dateOffset() {
+    private void dateOffset() {
         try {
             Calendar c0 = Calendar.getInstance();
             System.out.println("当前时间：" + sdfDateTime.format(c0.getTime()));
@@ -182,7 +182,7 @@ public class CalenderTest {
      * 获取两日期之间相隔天数
      */
     @Test
-    public void getBetweenDays() {
+    private void getBetweenDays() {
         // 日期字符串
         String startDateStr = "2021-05-29 17:07:07";
         String endDateStr = "2021-06-02 00:00:00";
@@ -206,7 +206,7 @@ public class CalenderTest {
      * 获取连续日期：从昨天开始计算
      */
     @Test
-    public void runningDays() {
+    private void runningDays() {
         List<String> list = new ArrayList<>();
         String[] arr = {"2021-05-31", "2021-06-01", "2021-06-03", "2021-06-04", "2021-06-05", "2021-06-06", "2021-06-07", "2021-06-08"};
         List<String> list1 = Arrays.asList(arr);
@@ -250,7 +250,7 @@ public class CalenderTest {
      * 根据开始/结束时间，计算跨越的月份
      */
     @Test
-    public void getSpanMonthList() {
+    private void getSpanMonthList() {
         String startDate = "2021-04-01 13:23:51";
         String endDate = "2021-06-03 20:32:13";
         List<Map<String, String>> list = new ArrayList<>();

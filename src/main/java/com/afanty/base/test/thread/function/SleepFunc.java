@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 /**
  * <p>
  * 测试线程休眠状态
- *
+ * <p>
  * 1.模拟延时：放大问题的发生性
  * 2.模拟倒计时
  * </p>
@@ -16,19 +16,6 @@ import java.text.SimpleDateFormat;
 public class SleepFunc implements Runnable {
 
     private int ticketNum = 10;
-
-    @Override
-    public void run() {
-        while (ticketNum > 0) {
-            // 模拟延时
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(Thread.currentThread().getName() + "-->买到第" + ticketNum-- + "张票");
-        }
-    }
 
     public static void main(String[] args) throws Exception {
         /*
@@ -61,6 +48,19 @@ public class SleepFunc implements Runnable {
             System.out.println("北京时间：" + sdf.format(currentTimeMillis));
             Thread.sleep(1000);
             currentTimeMillis = System.currentTimeMillis();
+        }
+    }
+
+    @Override
+    public void run() {
+        while (ticketNum > 0) {
+            // 模拟延时
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(Thread.currentThread().getName() + "-->买到第" + ticketNum-- + "张票");
         }
     }
 }

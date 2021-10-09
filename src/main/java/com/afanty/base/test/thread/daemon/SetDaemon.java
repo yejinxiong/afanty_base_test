@@ -2,7 +2,7 @@ package com.afanty.base.test.thread.daemon;
 
 /**
  * <p>
- *守护线程
+ * 守护线程
  * </p>
  *
  * @author yejx
@@ -26,7 +26,7 @@ public class SetDaemon {
 /**
  * 上帝
  */
-class God implements Runnable{
+class God implements Runnable {
     @Override
     public void run() {
         while (true) {
@@ -38,7 +38,7 @@ class God implements Runnable{
 /**
  * 你
  */
-class You implements Runnable{
+class You implements Runnable {
 
     @Override
     public void run() {

@@ -21,6 +21,7 @@ public class MultiThreadImplDownload implements Runnable {
 
     /**
      * 有参构造器
+     *
      * @param remoteUrl
      * @param fileName
      */
@@ -30,18 +31,9 @@ public class MultiThreadImplDownload implements Runnable {
     }
 
     /**
-     * 下载图片的线程的执行体
-     */
-    @Override
-    public void run() {
-        WebDownload2 webDownload2 = new WebDownload2();
-        webDownload2.download(remoteUrl, fileName);
-        System.out.println("文件下载成功：" + fileName);
-    }
-
-    /**
      * 分析运行结果：先运行t1，再运行t2，最后运行t3
      * 实际运行结果：无序
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -61,6 +53,16 @@ public class MultiThreadImplDownload implements Runnable {
         new Thread(t2).start();
         new Thread(t3).start();
     }
+
+    /**
+     * 下载图片的线程的执行体
+     */
+    @Override
+    public void run() {
+        WebDownload2 webDownload2 = new WebDownload2();
+        webDownload2.download(remoteUrl, fileName);
+        System.out.println("文件下载成功：" + fileName);
+    }
 }
 
 /**
@@ -69,8 +71,9 @@ public class MultiThreadImplDownload implements Runnable {
 class WebDownload2 {
     /**
      * 下载方法
+     *
      * @param remoteUrl 远程图片地址
-     * @param fileName 文件存放路径
+     * @param fileName  文件存放路径
      */
     public void download(String remoteUrl, String fileName) {
         try {

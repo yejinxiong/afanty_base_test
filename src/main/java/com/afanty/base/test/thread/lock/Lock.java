@@ -22,15 +22,15 @@ public class Lock {
 
 class BuyTicket implements Runnable {
 
-    private int tickets = 10;
-
     // 定义lock锁
     private final ReentrantLock LOCK = new ReentrantLock();
+    private int tickets = 10;
 
     @Override
     public void run() {
+        // 加锁
+        LOCK.lock();
         try {
-            LOCK.lock(); // 加锁
             while (tickets > 0) {
                 try {
                     Thread.sleep(1000);

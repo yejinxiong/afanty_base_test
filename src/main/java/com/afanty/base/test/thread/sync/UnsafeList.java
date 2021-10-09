@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * <p>
- *线程不安全的集合
+ * 线程不安全的集合
  * </p>
  *
  * @author yejx

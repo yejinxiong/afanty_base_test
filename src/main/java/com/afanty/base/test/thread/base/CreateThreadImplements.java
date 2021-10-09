@@ -12,13 +12,6 @@ package com.afanty.base.test.thread.base;
  */
 public class CreateThreadImplements implements Runnable {
 
-    @Override
-    public void run() {
-        for (int i = 1; i <= 200; i++) {
-            System.out.println("run方法线程====================" + i);
-        }
-    }
-
     public static void main(String[] args) {
         // 创建Runable接口的实现类对象
         CreateThreadImplements createThreadImplements = new CreateThreadImplements();
@@ -28,6 +21,13 @@ public class CreateThreadImplements implements Runnable {
 
         for (int i = 1; i <= 200; i++) {
             System.out.println("main线程+++++++++++++++++++++" + i);
+        }
+    }
+
+    @Override
+    public void run() {
+        for (int i = 1; i <= 200; i++) {
+            System.out.println("run方法线程====================" + i);
         }
     }
 }

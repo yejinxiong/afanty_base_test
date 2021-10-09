@@ -11,7 +11,7 @@ spring:
   application:
     name: afanty_base_test #服务名称
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/afanty_test?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -63,3 +63,8 @@ ftpServer:
          	Y: '192.168.30.118|21|ftpusr|123456|/var/ftp|ftp'
          }"
   saveDir: contact
+
+# es配置类
+elasticsearch:
+  host: 127.0.0.1
+  port: 9200

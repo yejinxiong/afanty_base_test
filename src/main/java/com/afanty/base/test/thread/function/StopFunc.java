@@ -19,21 +19,6 @@ public class StopFunc implements Runnable {
      */
     private boolean flag = true;
 
-    @Override
-    public void run() {
-        int i = 1;
-        while (flag) {
-            System.out.println("run---------------" + i++);
-        }
-    }
-
-    /**
-     * 设置一个公开的方法停止线程，转换标志位
-     */
-    public void customStop() {
-        this.flag = false;
-    }
-
     public static void main(String[] args) {
         StopFunc stopFunc = new StopFunc();
         new Thread(stopFunc).start();
@@ -48,5 +33,20 @@ public class StopFunc implements Runnable {
         }
 
 
+    }
+
+    @Override
+    public void run() {
+        int i = 1;
+        while (flag) {
+            System.out.println("run---------------" + i++);
+        }
+    }
+
+    /**
+     * 设置一个公开的方法停止线程，转换标志位
+     */
+    public void customStop() {
+        this.flag = false;
     }
 }

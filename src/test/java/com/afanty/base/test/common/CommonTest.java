@@ -1,11 +1,11 @@
 package com.afanty.base.test.common;
 
-import com.afanty.base.test.lamda.entity.Employee;
-import com.afanty.base.test.lamda.entity.RemedySheet;
+import com.afanty.base.test.lambda.entity.Employee;
+import com.afanty.base.test.lambda.entity.RemedySheet;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

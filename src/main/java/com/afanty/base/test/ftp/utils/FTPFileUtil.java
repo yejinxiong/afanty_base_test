@@ -85,9 +85,11 @@ public class FTPFileUtil implements FTPServerInterface {
      * @return
      * @throws Exception
      */
+    @Override
     public boolean download(String ftpFile, String saveLocalFile) throws Exception {
-        if (ftp == null)
+        if (ftp == null) {
             throw new Exception("FTP客户端未连接或创建连接出错");
+        }
         File file = new File(saveLocalFile);
         if (!file.exists()) {
             File parentFile = new File(file.getParent());
@@ -104,12 +106,14 @@ public class FTPFileUtil implements FTPServerInterface {
 
     @Deprecated
     public InputStream download(String ftpFile) throws Exception {
-        if (ftp == null)
+        if (ftp == null) {
             throw new Exception("FTP客户端未连接或创建连接出错");
+        }
         ftp.enterLocalPassiveMode(); // 这句话为了解决 长连接下载文件进入假死阻塞状态，坑死老夫啊啊啊啊啊
         InputStream is = ftp.retrieveFileStream(ftpFile);
-        if (is != null)
+        if (is != null) {
             ftp.completePendingCommand(); //必须得调用这句话 ，否则下次下载is=null，老夫被坑死了
+        }
         return is;
     }
 
@@ -121,6 +125,7 @@ public class FTPFileUtil implements FTPServerInterface {
      * @return
      * @throws Exception
      */
+    @Override
     public boolean fastDownload(String ftpFile, String saveLocalFile) throws Exception {
         boolean b = download(ftpFile, saveLocalFile);
         try {
@@ -133,6 +138,7 @@ public class FTPFileUtil implements FTPServerInterface {
     /**
      * 关闭Ftp
      */
+    @Override
     public void close() throws IOException {
         ftp.logout();
         ftp.disconnect();
@@ -147,8 +153,9 @@ public class FTPFileUtil implements FTPServerInterface {
      */
 
     public List<String> listDirectories(String path) throws Exception {
-        if (ftp == null)
+        if (ftp == null) {
             throw new Exception("FTP客户端未连接或创建连接出错");
+        }
         FTPFile[] ftpFiles = ftp.listDirectories(path);
         List<String> list = new ArrayList<String>();
         for (FTPFile ftpFile : ftpFiles) {
@@ -165,8 +172,9 @@ public class FTPFileUtil implements FTPServerInterface {
      * @throws Exception
      */
     public boolean cd(String parentPath) throws Exception {
-        if (ftp == null)
+        if (ftp == null) {
             throw new Exception("FTP客户端未连接或创建连接出错");
+        }
         return ftp.changeWorkingDirectory(parentPath);
     }
 
@@ -177,9 +185,11 @@ public class FTPFileUtil implements FTPServerInterface {
      * @param dst
      * @throws Exception
      */
+    @Override
     public boolean upload(File file, String dst) throws Exception {
-        if (ftp == null)
+        if (ftp == null) {
             throw new Exception("FTP客户端未连接或创建连接出错");
+        }
         FileInputStream is = null;
         try {
             cd(dst);
@@ -205,8 +215,9 @@ public class FTPFileUtil implements FTPServerInterface {
      * @throws Exception
      */
     public boolean delete(String file) throws Exception {
-        if (ftp == null)
+        if (ftp == null) {
             throw new Exception("FTP客户端未连接或创建连接出错");
+        }
         try {
             return ftp.deleteFile(file);
         } catch (Exception e) {
@@ -222,9 +233,11 @@ public class FTPFileUtil implements FTPServerInterface {
      * @throws Exception
      */
 
+    @Override
     public boolean isExistsDir(String path) throws Exception {
-        if (ftp == null)
+        if (ftp == null) {
             throw new Exception("FTP客户端未连接或创建连接出错");
+        }
         return ftp.changeWorkingDirectory(path);
     }
 
@@ -238,8 +251,9 @@ public class FTPFileUtil implements FTPServerInterface {
      */
 
     public boolean downloadByTemp(String remoteFile, InputStream tempIs) throws Exception {
-        if (ftp == null)
+        if (ftp == null) {
             throw new Exception("FTP客户端未连接或创建连接出错");
+        }
         return ftp.storeFile(remoteFile, tempIs);
     }
 
@@ -249,6 +263,7 @@ public class FTPFileUtil implements FTPServerInterface {
      * @param path 路径
      * @return 列表
      */
+    @Override
     public List<String> listFiles(String path) throws Exception {
 
         return null;

@@ -21,6 +21,12 @@ public class Race implements Runnable {
      */
     private String winner;
 
+    public static void main(String[] args) {
+        Race race = new Race();
+        new Thread(race, "兔子").start();
+        new Thread(race, "乌龟").start();
+    }
+
     @Override
     public void run() {
         while (true) {
@@ -62,11 +68,5 @@ public class Race implements Runnable {
             }
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        Race race = new Race();
-        new Thread(race, "兔子").start();
-        new Thread(race, "乌龟").start();
     }
 }

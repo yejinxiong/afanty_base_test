@@ -22,19 +22,13 @@ public class MultiThreadCallableDownload implements Callable<Boolean> {
 
     /**
      * 有参构造器
+     *
      * @param remoteUrl
      * @param fileName
      */
     public MultiThreadCallableDownload(String remoteUrl, String fileName) {
         this.remoteUrl = remoteUrl;
         this.fileName = fileName;
-    }
-    @Override
-    public Boolean call() throws Exception {
-        WebDownload3 webDownload3 = new WebDownload3();
-        webDownload3.download(remoteUrl, fileName);
-        System.out.println("文件下载成功：" + fileName);
-        return null;
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -64,6 +58,14 @@ public class MultiThreadCallableDownload implements Callable<Boolean> {
         executorService.shutdownNow();
 
     }
+
+    @Override
+    public Boolean call() throws Exception {
+        WebDownload3 webDownload3 = new WebDownload3();
+        webDownload3.download(remoteUrl, fileName);
+        System.out.println("文件下载成功：" + fileName);
+        return null;
+    }
 }
 
 /**
@@ -72,8 +74,9 @@ public class MultiThreadCallableDownload implements Callable<Boolean> {
 class WebDownload3 {
     /**
      * 下载方法
+     *
      * @param remoteUrl 远程图片地址
-     * @param fileName 文件存放路径
+     * @param fileName  文件存放路径
      */
     public void download(String remoteUrl, String fileName) {
         try {

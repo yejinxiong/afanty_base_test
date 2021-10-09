@@ -1,6 +1,6 @@
 package com.afanty.base.test.io.bytestream;
 
-import com.afanty.base.test.utils.AfantyConstant;
+import com.afanty.base.test.common.contanst.EncodeConstant;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class FileByteOutput {
         try {
             File file = new File("C:\\Users\\yejx\\Desktop\\yqzb2.txt");
             List<String> lines = new ArrayList<>(Arrays.asList(contentArr));
-            FileUtils.writeLines(file, AfantyConstant.ENCODE_GBK, lines);
+            FileUtils.writeLines(file, EncodeConstant.ENCODE_GBK, lines);
             logger.info("方案二执行成功");
         } catch (IOException e) {
             logger.error("方案二执行失败，文件输出异常：{}", e.getMessage());
@@ -46,15 +46,15 @@ public class FileByteOutput {
 //                // 1. 直接写入硬盘
 //                for (String content : contentArr) {
 //                    fos.write(content.getBytes());
-//                    fos.write(AfantyConstant.NEXT_LINE.getBytes());
+//                    fos.write(EncodeConstant.NEXT_LINE.getBytes());
 //                }
 
                 // 2. 先写入字节缓冲区，再刷新到硬盘
-                OutputStreamWriter osw = new OutputStreamWriter(fos, AfantyConstant.ENCODE_GBK);
+                OutputStreamWriter osw = new OutputStreamWriter(fos, EncodeConstant.ENCODE_GBK);
                 BufferedWriter bw = new BufferedWriter(osw);
                 for (String content : contentArr) {
                     bw.write(content);
-                    bw.write(AfantyConstant.NEXT_LINE);
+                    bw.write(EncodeConstant.NEXT_LINE);
                     bw.flush();
                 }
                 bw.close();
