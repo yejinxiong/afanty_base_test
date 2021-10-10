@@ -33,9 +33,16 @@
         <if test="standardId!=null and standardId!=''">
             AND standard_id = #{standardId}
         </if>
-        <if test="itemsName!=null and itemsName!=''">
-            AND items_name = #{itemsName}
-        </if>
+        <choose>
+            <when test="itemsNameRepeat!=null and itemsNameRepeat!=''">
+                AND items_name = #{itemsNameRepeat}
+            </when>
+            <when test="itemsName!=null and itemsName!=''">
+                AND items_name like concat('%',#{itemsName},'%')
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
         <if test="itemsScore!=null and itemsScore!=''">
             AND items_score = #{itemsScore}
         </if>
