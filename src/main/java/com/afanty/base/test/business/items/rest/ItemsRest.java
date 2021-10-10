@@ -3,6 +3,7 @@ package com.afanty.base.test.business.items.rest;
 
 import com.afanty.base.test.business.items.entity.Items;
 import com.afanty.base.test.business.items.service.ItemsServiceImpl;
+import com.afanty.base.test.common.utils.OkHttpUtil;
 import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.PageResult;
 import com.afanty.base.test.common.web.ResponseResult;
@@ -14,6 +15,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -45,6 +47,60 @@ public class ItemsRest {
 
     @Resource(name = "itemsServiceImpl")
     private ItemsServiceImpl itemsService;
+
+    @Resource
+    private OkHttpUtil okHttpUtil;
+
+    @RequestMapping(value = "/remotegetlist", method = RequestMethod.GET)
+    public ResponseResult remoteGetList(@RequestParam Map<String, String> param) {
+        LOGGER.info("远程条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
+        ResponseResult rr = new ResponseResult();
+        try {
+            String url = "http://127.0.0.1:9090/mp/ac/system/items/getlist";
+            LOGGER.info("远程条件查询评分项表, url：{}", url);
+            String result = okHttpUtil.get(url, param, null);
+            JSONObject responseObject = JSONObject.parseObject(result);
+            LOGGER.info("远程条件查询评分项表, 结果：{}", JSONObject.toJSONString(responseObject));
+            List<Items> itemsList = Optional.ofNullable(responseObject)
+                    .map(response -> JSONObject.parseArray(response.getString("data"), Items.class))
+                    .orElseGet(ArrayList::new);
+            rr.setData(itemsList);
+        } catch (Exception e) {
+            LOGGER.error("远程条件查询评分项表异常：{}", e.getMessage());
+            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+        }
+        return rr;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @RequestMapping(value = "/remoteupdate", method = RequestMethod.POST)
+    public ResponseResult remoteUpdate(Items items) {
+        LOGGER.info("本地修改标签 参数：{}", JSONObject.toJSONString(items));
+        ResponseResult rr = new ResponseResult();
+        if (items == null || StringUtils.isEmpty(items.getItemsId())) {
+            rr.setStatus(StatusCode.CODE_1000.getKey());
+            rr.setMsg(StatusCode.CODE_1000.getDesc());
+            return rr;
+        }
+        try {
+            itemsService.updateById(items);
+            int i = 1/0;
+
+            Map<String, String> param = new HashMap<>();
+            param.put("itemsId", "01a4d6dd5ace4e1cbf56c31d3dd698a4");
+            param.put("field1", "测试1");
+            LOGGER.info("远程修改评标签，参数：{}", JSONObject.toJSONString(param));
+            String url = "http://127.0.0.1:9090/mp/ac/system/items/update";
+            LOGGER.info("远程修改评标签, url：{}", url);
+            String result = okHttpUtil.post(url, param, null);
+            JSONObject responseObject = JSONObject.parseObject(result);
+            LOGGER.info("远程修改标签, 结果：{}", JSONObject.toJSONString(responseObject));
+        } catch (Exception e) {
+            LOGGER.error("修改标签异常：{}", e.getMessage());
+            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+        }
+        return rr;
+    }
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
