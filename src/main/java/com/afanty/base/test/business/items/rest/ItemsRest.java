@@ -7,11 +7,9 @@ import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.PageResult;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,7 +30,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/items")
-@Api(value = "items", description = "评分项表接口")
+@Api(tags = "评分项表接口", value = "items", description = "评分项表接口")
 @ApiResponses(value = {
         @ApiResponse(code = 200, message = "请求已完成"),
         @ApiResponse(code = 201, message = "资源成功被创建"),
@@ -48,10 +46,13 @@ public class ItemsRest {
     @Resource(name = "itemsServiceImpl")
     private ItemsServiceImpl itemsService;
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
     @ApiOperation(value = "条件查询评分项表", notes = "条件查询评分项表", response = ResponseResult.class)
     @RequestMapping(value = "/getlist", method = RequestMethod.GET)
-    public ResponseResult getlist(@RequestParam Map<String, Object> param) {
-        LOGGER.info("条件查询评分项表, 参数：{}", param);
+    public ResponseResult getlist(@RequestParam(required = false) Map<String, Object> param) {
+        LOGGER.info("条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
         ResponseResult rr = new ResponseResult();
         try {
             rr.setData(itemsService.baseListQuery(param));
@@ -65,7 +66,7 @@ public class ItemsRest {
     @ApiOperation(value = "分页查询评分项表", notes = "分页查询评分项表", response = ResponseResult.class)
     @RequestMapping(value = "/getpagelist", method = RequestMethod.GET)
     public ResponseResult getpagelist(@RequestParam Map<String, Object> param) {
-        LOGGER.info("条件查询评分项表, 参数：{}", param);
+        LOGGER.info("条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
         ResponseResult rr = new ResponseResult();
         Page<Items> page = new Page<>();
         try {
@@ -86,7 +87,7 @@ public class ItemsRest {
     @ApiOperation(value = "根据id批量查询", notes = "将所有id放到一个字符串", response = ResponseResult.class)
     @RequestMapping(value = "/getlistbatchbyids", method = RequestMethod.GET)
     public ResponseResult getlistbatchbyids(@RequestParam Map<String, Object> param) {
-        LOGGER.info("根据id批量查询, 参数：{}", param);
+        LOGGER.info("根据id批量查询, 参数：{}", JSONObject.toJSONString(param));
         ResponseResult rr = new ResponseResult();
         String itemsIds = MapUtils.getString(param, "itemsIds");
         if (StringUtils.isEmpty(itemsIds)) {
@@ -108,7 +109,7 @@ public class ItemsRest {
     @ApiOperation(value = "新建", notes = "param：items", response = ResponseResult.class)
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(Items items) {
-        LOGGER.info("新建, 参数：{}", items);
+        LOGGER.info("新建, 参数：{}", JSONObject.toJSONString(items));
         ResponseResult rr = new ResponseResult();
         if (items == null) {
             rr.setStatus(StatusCode.CODE_1000.getKey());
@@ -130,7 +131,7 @@ public class ItemsRest {
     @ApiOperation(value = "批量新建", notes = "param：items", response = ResponseResult.class)
     @RequestMapping(value = "/savebatch", method = RequestMethod.POST)
     public ResponseResult savebatch(@RequestBody List<Items> list) {
-        LOGGER.info("批量新建, 参数：{}", list);
+        LOGGER.info("批量新建, 参数：{}", JSONObject.toJSONString(list));
         ResponseResult rr = new ResponseResult();
         if (list == null || list.size() <= 0) {
             rr.setStatus(StatusCode.CODE_1000.getKey());
@@ -149,7 +150,7 @@ public class ItemsRest {
     @ApiOperation(value = "修改", notes = "param：items", response = ResponseResult.class)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseResult update(Items items) {
-        LOGGER.info("修改, 参数：{}", items);
+        LOGGER.info("修改, 参数：{}", JSONObject.toJSONString(items));
         ResponseResult rr = new ResponseResult();
         if (items == null || StringUtils.isEmpty(items.getItemsId())) {
             rr.setStatus(StatusCode.CODE_1000.getKey());
@@ -168,7 +169,7 @@ public class ItemsRest {
     @ApiOperation(value = "根据id批量修改使用状态", notes = "param：itemsIds,isUse", response = ResponseResult.class)
     @RequestMapping(value = "/updateusebatchbyid", method = RequestMethod.POST)
     public ResponseResult updateUseBatchById(@RequestParam Map<String, Object> param) {
-        LOGGER.info("根据id批量修改使用状态, 参数：{}", param);
+        LOGGER.info("根据id批量修改使用状态, 参数：{}", JSONObject.toJSONString(param));
         ResponseResult rr = new ResponseResult();
         String itemsIds = MapUtils.getString(param, "itemsIds");
         Integer isUse = MapUtils.getInteger(param, "isUse");

@@ -2,7 +2,8 @@ server:
   port: 9000
   tomcat:
     uri-encoding: UTF-8
-    max-threads: 500
+    threads:
+      max: 500
   servlet:
     context-path: /afanty/base/test
   max-http-header-size: 4048576
@@ -68,3 +69,9 @@ ftpServer:
 elasticsearch:
   host: 127.0.0.1
   port: 9200
+
+# 用于控制是否开启Swagger，生产环境记得关闭Swagger，将值设置为 false
+springfox:
+  swagger2:
+    enabled: true
+

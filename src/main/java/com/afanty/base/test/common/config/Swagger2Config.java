@@ -1,5 +1,7 @@
 package com.afanty.base.test.common.config;
 
+import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,23 +23,37 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class Swagger2Config {
 
+    private static final String VERSION = "1.0.0";
+
+    @Value("${springfox.swagger2.enabled}")
+    private Boolean swagger2Enabled;
+
+    /**
+     * 说明：这里通过.apis(RequestHandlerSelectors.withClassAnnotation(Api.class))标明给加上@Api注解的类自动生成接口文档
+     * @return
+     */
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .enable(swagger2Enabled)
+                .groupName("Afanty")
                 .apiInfo(apiInfo())
-                .enable(true)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.afanty.mp.ac.system.business"))
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.any())
                 .build();
     }
 
+    /**
+     * 添加摘要信息
+     * @return
+     */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("管理平台-权限中心-系统 API 文档")
-                .description("管理平台-权限中心-系统 API 网关接口，http://127.0.0.1:9000")
-                .termsOfServiceUrl("http://127.0.0.1:9000")
-                .version("1.0.0")
+                .title("阿凡提基础测试项目-接口文档")
+                .description("阿凡提基础测试项目-接口文档")
+                .termsOfServiceUrl("http://www.afanty.com")
+                .version(VERSION)
                 .build();
     }
 

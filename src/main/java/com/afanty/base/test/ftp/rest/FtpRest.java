@@ -37,7 +37,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/ftp")
-@Api(value = "ftp", description = "FTP接口")
+@Api(tags = "FTP接口", value = "ftp", description = "FTP接口")
 @ApiResponses(value = {
         @ApiResponse(code = 200, message = "请求已完成"),
         @ApiResponse(code = 201, message = "资源成功被创建"),
