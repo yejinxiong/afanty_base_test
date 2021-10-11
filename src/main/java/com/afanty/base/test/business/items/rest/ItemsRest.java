@@ -118,7 +118,8 @@ public class ItemsRest {
             return rr;
         }
         try {
-            String[] split = itemsIds.split(",");
+            // 根据多个符号进行分割
+            String[] split = itemsIds.split("[,，]");
             List<Items> itemsList = itemsService.listByIds(Arrays.asList(split));
             rr.setData(itemsList);
         } catch (Exception e) {
@@ -204,7 +205,8 @@ public class ItemsRest {
             return rr;
         }
         try {
-            String[] split = itemsIds.split(",");
+            // 根据多个符号进行分割
+            String[] split = itemsIds.split("[,，]");
             List<Items> itemsList = new ArrayList<>();
             Arrays.asList(split).forEach(id -> {
                 Items items = new Items();
