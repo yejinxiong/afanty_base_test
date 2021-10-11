@@ -1,12 +1,15 @@
 package com.afanty.base.test.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -18,16 +21,12 @@ import java.util.Map;
  * @date 2021/10/10
  */
 @Slf4j
-@Component
 public class OkHttpUtil {
 
     /**
      * okhttpclient
      */
-//    private OkHttpClient okHttpClient = SpringUtilEx.getBean(OkHttpClient.class);
-
-    @Resource
-    private OkHttpClient okHttpClient;
+    private static OkHttpClient okHttpClient = SpringUtil.getBean(OkHttpClient.class);
 
     /**
      * 描  述：OKHTTP GET 方式请求
@@ -35,7 +34,7 @@ public class OkHttpUtil {
      * 参  数：queries 请求的参数，在浏览器？后面的数据，没有可以传null
      * 返回值：java.lang.String
      */
-    public String get(String url, Map<String, String> queries, Map<String, String> headers) {
+    public static String get(String url, Map<String, String> queries, Map<String, String> headers) {
         //构建请求
         Request request = createRequestBuild(buildGetUrl(url, queries), headers).build();
 
@@ -49,7 +48,7 @@ public class OkHttpUtil {
      * 参  数：params form表单POST提交的map
      * 返回值：java.lang.String
      */
-    public String post(String url, Map<String, String> params, Map<String, String> headers) {
+    public static String post(String url, Map<String, String> params, Map<String, String> headers) {
         //post form形式参数处理
         FormBody.Builder builder = new FormBody.Builder();
         if (params != null && params.keySet().size() > 0) {
@@ -73,7 +72,7 @@ public class OkHttpUtil {
      * 参  数：queries 请求的参数，在浏览器？后面的数据，没有可以传null
      * 返回值：java.lang.String
      */
-    public String getForHeader(String url, Map<String, String> queries, Map<String, String> headers) {
+    public static String getForHeader(String url, Map<String, String> queries, Map<String, String> headers) {
         //构建请求
         Request request = createRequestBuild(buildGetUrl(url, queries), headers).build();
 
@@ -87,7 +86,7 @@ public class OkHttpUtil {
      * 参  数：jsonParams 请求的JSON格式字符串
      * 返回值：java.lang.String
      */
-    public String postJsonParams(String url, String jsonParams, Map<String, String> headers) {
+    public static String postJsonParams(String url, String jsonParams, Map<String, String> headers) {
         //构建请求
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams);
         Request request = createRequestBuild(url, headers)
@@ -104,7 +103,7 @@ public class OkHttpUtil {
      * 参  数：xml 请求的xmlString
      * 返回值：java.lang.String
      */
-    public String postXmlParams(String url, String xml, Map<String, String> headers) {
+    public static String postXmlParams(String url, String xml, Map<String, String> headers) {
         //构建请求
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/xml; charset=utf-8"), xml);
         Request request = createRequestBuild(url, headers)
@@ -118,7 +117,7 @@ public class OkHttpUtil {
     /**
      * 构建get请求的url
      */
-    private String buildGetUrl(String rootUrl, Map<String, String> params) {
+    private static String buildGetUrl(String rootUrl, Map<String, String> params) {
         StringBuilder sb = new StringBuilder(rootUrl);
         if (params != null && params.keySet().size() > 0) {
             //url是否已经携带参数
@@ -149,7 +148,7 @@ public class OkHttpUtil {
     /**
      * 创建请求构建器
      */
-    private Request.Builder createRequestBuild(String url, Map<String, String> headers) {
+    private static Request.Builder createRequestBuild(String url, Map<String, String> headers) {
         //创建请求构建器
         Request.Builder builder = new Request.Builder();
 
@@ -173,7 +172,7 @@ public class OkHttpUtil {
     /**
      * 请求调用
      */
-    private String call(Request request) {
+    private static String call(Request request) {
         Response response = null;
         try {
             response = okHttpClient.newCall(request).execute();

@@ -48,9 +48,6 @@ public class ItemsRest {
     @Resource(name = "itemsServiceImpl")
     private ItemsServiceImpl itemsService;
 
-    @Resource
-    private OkHttpUtil okHttpUtil;
-
     @RequestMapping(value = "/remotegetlist", method = RequestMethod.GET)
     public ResponseResult remoteGetList(@RequestParam Map<String, String> param) {
         LOGGER.info("远程条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
@@ -58,7 +55,7 @@ public class ItemsRest {
         try {
             String url = "http://127.0.0.1:9090/mp/ac/system/items/getlist";
             LOGGER.info("远程条件查询评分项表, url：{}", url);
-            String result = okHttpUtil.get(url, param, null);
+            String result = OkHttpUtil.get(url, param, null);
             JSONObject responseObject = JSONObject.parseObject(result);
             LOGGER.info("远程条件查询评分项表, 结果：{}", JSONObject.toJSONString(responseObject));
             List<Items> itemsList = Optional.ofNullable(responseObject)
@@ -92,7 +89,7 @@ public class ItemsRest {
             LOGGER.info("远程修改评标签，参数：{}", JSONObject.toJSONString(param));
             String url = "http://127.0.0.1:9090/mp/ac/system/items/update";
             LOGGER.info("远程修改评标签, url：{}", url);
-            String result = okHttpUtil.post(url, param, null);
+            String result = OkHttpUtil.post(url, param, null);
             JSONObject responseObject = JSONObject.parseObject(result);
             LOGGER.info("远程修改标签, 结果：{}", JSONObject.toJSONString(responseObject));
         } catch (Exception e) {
