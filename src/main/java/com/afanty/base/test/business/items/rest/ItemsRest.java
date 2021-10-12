@@ -223,6 +223,7 @@ public class ItemsRest {
     }
 
     @ApiOperation(value = "根据id查询评分项", notes = "根据id查询评分项", response = ResponseResult.class)
+    @ApiImplicitParams({@ApiImplicitParam(name = "itemsId", value = "标签id", required = true, dataType = "String", paramType = "path")})
     @RequestMapping(value = "/{itemsId}", method = RequestMethod.GET)
     public ResponseResult getById(@PathVariable String itemsId) {
         LOGGER.info("根据id查询评分项, 参数：{}", itemsId);
@@ -242,6 +243,7 @@ public class ItemsRest {
     }
 
     @ApiOperation(value = "根据id删除评分项", notes = "根据id删除评分项", response = ResponseResult.class)
+    @ApiImplicitParams({@ApiImplicitParam(name = "itemsId", value = "标签id", required = true, dataType = "String", paramType = "path")})
     @RequestMapping(value = "/{itemsId}", method = RequestMethod.DELETE)
     public ResponseResult getlist(@PathVariable String itemsId) {
         LOGGER.info("根据id删除评分项, 参数：{}", itemsId);
