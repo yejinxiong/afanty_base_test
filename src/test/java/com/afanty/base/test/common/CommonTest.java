@@ -1,5 +1,6 @@
 package com.afanty.base.test.common;
 
+import com.afanty.base.test.common.contanst.EncodeConstant;
 import com.afanty.base.test.lambda.entity.Employee;
 import com.afanty.base.test.lambda.entity.RemedySheet;
 import com.alibaba.fastjson.JSONObject;
@@ -9,7 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -409,6 +413,23 @@ public class CommonTest {
             String codeDesc = MapUtils.getString(map, "codeDesc");
             System.out.println(codeValue + "=>" + codeDesc);
         });
+    }
+
+    /**
+     * url解码&编码
+     */
+    @Test
+    public void testDecoderAndEncoder() {
+        try {
+            String decodeStr = "%25E4%25B8%25AD%25E5%258D%258E%25E4%25BA%25BA%25E5%2590%258D%25E5%2585%25B1%25E5%2592%258C%25E5%259B%25BD";
+            String encodeStr = "中户人民共和国";
+            String decode = URLDecoder.decode(decodeStr, EncodeConstant.ENCODE_UTF_8);
+            String encode = URLEncoder.encode(encodeStr, EncodeConstant.ENCODE_UTF_8);
+            System.out.println("解码：" + decode);
+            System.out.println("编码：" + encode);
+        } catch (UnsupportedEncodingException e) {
+            logger.error("转码/解码异常：{}", e.getMessage());
+        }
     }
 
 }
