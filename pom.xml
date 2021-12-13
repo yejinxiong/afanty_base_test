@@ -34,6 +34,10 @@
         <jsoup.version>1.11.3</jsoup.version>
         <spring-boot-starter-thymeleaf.version>2.4.3</spring-boot-starter-thymeleaf.version>
         <okhttp.version>4.9.1</okhttp.version>
+        <zookeeper.version>3.7.0</zookeeper.version>
+        <curator-framework.version>5.2.0</curator-framework.version>
+        <curator-recipes.version>5.2.0</curator-recipes.version>
+        <curator-client.version>5.2.0</curator-client.version>
     </properties>
 
     <dependencies>
@@ -178,6 +182,30 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>3.10.0</version>
+        </dependency>
+
+        <!-- zookeeper -->
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>${zookeeper.version}</version>
+        </dependency>
+
+        <!-- zookeeper分布式锁成熟框架，不用自己手写 -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>${curator-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>${curator-recipes.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-client</artifactId>
+            <version>${curator-client.version}</version>
         </dependency>
     </dependencies>
 
