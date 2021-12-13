@@ -21,7 +21,7 @@ import java.util.Vector;
  */
 public class SFTPFileUtil implements FTPServerInterface {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     private String host;
     private int port;
@@ -47,14 +47,14 @@ public class SFTPFileUtil implements FTPServerInterface {
         this.userName = userName;
         this.password = password;
         try {
-            log.info("创建SFTP连接中，host[" + host + "]" +
+            LOGGER.info("创建SFTP连接中，host[" + host + "]" +
                     ",port[" + port + "]," +
                     "userName[" + userName + "]," +
                     "password[" + password + "]");
             connectFtp();
         } catch (Exception e) {
             sftpClient = null;
-            log.error("创建SFTP连接出错，host[" + host + "]" +
+            LOGGER.error("创建SFTP连接出错，host[" + host + "]" +
                     ",port[" + port + "]," +
                     "userName[" + userName + "]," +
                     "password[" + password + "]", e);
@@ -75,8 +75,8 @@ public class SFTPFileUtil implements FTPServerInterface {
         session.setConfig(config); // 为Session对象设置properties
         session.setTimeout(30 * 1000); // 设置timeout时间
         session.connect(); // 通过Session建立链接
-        log.info("成功连接SFTP " + host);
-        log.info("Opening Channel.");
+        LOGGER.info("成功连接SFTP " + host);
+        LOGGER.info("Opening Channel.");
         channel = session.openChannel("sftp"); // 打开SFTP通道
         channel.connect(); // 建立SFTP通道的连接
         sftpClient = (ChannelSftp) channel;
@@ -214,7 +214,7 @@ public class SFTPFileUtil implements FTPServerInterface {
         try {
             sftpClient.ls(path);
         } catch (SftpException se) {
-            log.error(path + "目录不存在...");
+            LOGGER.error(path + "目录不存在...");
             return false;
         }
         return true;

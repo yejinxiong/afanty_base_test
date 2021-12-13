@@ -1,8 +1,9 @@
 package com.afanty.base.test.common.config;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +27,10 @@ import java.util.concurrent.TimeUnit;
  * @author yejx
  * @date 2021/10/10
  */
-@Slf4j
 @Configuration
 public class OkHttpConfiguration {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OkHttpConfiguration.class);
 
     @Value("${ok.http.connect-timeout}")
     private Integer connectTimeout;
@@ -79,7 +81,7 @@ public class OkHttpConfiguration {
             sslContext.init(null, new TrustManager[]{x509TrustManager()}, new SecureRandom());
             return sslContext.getSocketFactory();
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            log.error("生成ssl工厂类异常：{}", e.getMessage());
+            LOGGER.error("生成ssl工厂类异常：{}", e.getMessage());
         }
         return null;
     }

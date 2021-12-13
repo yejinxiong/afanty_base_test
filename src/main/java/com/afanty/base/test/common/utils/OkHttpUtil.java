@@ -1,14 +1,10 @@
 package com.afanty.base.test.common.utils;
 
-import lombok.extern.slf4j.Slf4j;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -20,8 +16,9 @@ import java.util.Map;
  * @author yejx
  * @date 2021/10/10
  */
-@Slf4j
 public class OkHttpUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OkHttpUtil.class);
 
     /**
      * okhttpclient
@@ -180,13 +177,13 @@ public class OkHttpUtil {
                 return null != response.body() ? response.body().string() : "";
             }
         } catch (Exception e) {
-            log.error("okhttp3请求调用异常：{}", e.getMessage());
+            LOGGER.error("okhttp3请求调用异常：{}", e.getMessage());
         } finally {
             if (null != response) {
                 try {
                     response.close();
                 } catch (Exception e) {
-                    log.error("response关闭异常：{}", e.getMessage());
+                    LOGGER.error("response关闭异常：{}", e.getMessage());
                 }
             }
         }

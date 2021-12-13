@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class FTPFileUtil implements FTPServerInterface {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     private String host;
     private int port;
@@ -44,14 +44,14 @@ public class FTPFileUtil implements FTPServerInterface {
         this.userName = userName;
         this.password = password;
         try {
-            log.info("创建FTP连接中，host[" + host + "]" +
+            LOGGER.info("创建FTP连接中，host[" + host + "]" +
                     ",port[" + port + "]," +
                     "userName[" + userName + "]," +
                     "password[" + password + "]");
             connectFtp();
         } catch (Exception e) {
             ftp = null;
-            log.error("创建FTP连接出错，host[" + host + "]" +
+            LOGGER.error("创建FTP连接出错，host[" + host + "]" +
                     ",port[" + port + "]," +
                     "userName[" + userName + "]," +
                     "password[" + password + "]", e);
@@ -70,7 +70,7 @@ public class FTPFileUtil implements FTPServerInterface {
         ftp.setConnectTimeout(5000);
         ftp.connect(host, port);
         ftp.login(userName, password);
-        log.info("成功连接FTP " + host);
+        LOGGER.info("成功连接FTP " + host);
         ftp.setBufferSize(1024 * 10);
         ftp.setKeepAlive(true);
         ftp.setFileType(FTPClient.BINARY_FILE_TYPE);

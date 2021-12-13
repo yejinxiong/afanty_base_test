@@ -10,7 +10,7 @@ import java.util.Map;
 public class FTPManager {
 
     private static Map<String, Boolean> useMap = new HashMap<String, Boolean>();
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     /**
      * 线程使用完毕，将当前FTP连接状态置空【暂未使用】
@@ -53,7 +53,7 @@ public class FTPManager {
                 return this.getFtpConn(ftpConfigurBean);
             }
         }
-        log.error("没有找到FTP：ftp.vocserver" + index + "配置参数无法创建FTP连接，请检查application.properties文件配置是否正确...");
+        LOGGER.error("没有找到FTP：ftp.vocserver" + index + "配置参数无法创建FTP连接，请检查application.properties文件配置是否正确...");
         return null;
     }
 
