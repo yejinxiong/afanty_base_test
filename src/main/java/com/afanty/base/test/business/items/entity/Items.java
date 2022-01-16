@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 @ApiModel(value = "Items对象", description = "评分项表存的个省自定义的评分项数据，	读写，	数据量：< 10000条")
 public class Items implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -5515115932965300160L;
 
     /**
      * 评分项id

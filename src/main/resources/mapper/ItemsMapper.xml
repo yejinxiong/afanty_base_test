@@ -55,15 +55,6 @@
         <if test="isDelete!=null and isDelete!=''">
             AND is_delete = #{isDelete}
         </if>
-        <if test="isDelete!=null and isDelete!=''">
-            AND is_delete = #{isDelete}
-        </if>
-        <if test="isDelete!=null and isDelete!=''">
-            AND is_delete = #{isDelete}
-        </if>
-        <if test="isDelete!=null and isDelete!=''">
-            AND is_delete = #{isDelete}
-        </if>
         <if test="field1!=null and field1!=''">
             AND field1 = #{field1}
         </if>

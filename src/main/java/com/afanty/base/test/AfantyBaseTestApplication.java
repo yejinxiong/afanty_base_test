@@ -22,7 +22,7 @@ public class AfantyBaseTestApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AfantyBaseTestApplication.class, args);
-        LOGGER.info("已启动");
+        LOGGER.info("Application start success!");
     }
 
 }
