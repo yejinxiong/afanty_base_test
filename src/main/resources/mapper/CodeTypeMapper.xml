@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.afanty.base.test.system.codetype.mapper.CodeTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.afanty.base.test.system.codetype.entity.CodeType">
+        <id column="id" property="id" />
+        <result column="type_code" property="typeCode" />
+        <result column="type_name" property="typeName" />
+        <result column="type_desc" property="typeDesc" />
+        <result column="dict_or_tree" property="dictOrTree" />
+        <result column="delete_flag" property="deleteFlag" />
+        <result column="create_user" property="createUser" />
+        <result column="create_name" property="createName" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_name" property="updateName" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, type_code, type_name, type_desc, dict_or_tree, delete_flag, create_user, create_name, create_time, update_user, update_name, update_time
+    </sql>
+
+    <!-- 通用查询条件列 -->
+    <sql id="Base_Where_List">
+        WHERE delete_flag = 2
+        <if test="id!=null and id!=''">
+            AND id = #{id}
+        </if>
+        <if test="typeCode!=null and typeCode!=''">
+            AND type_code = #{typeCode}
+        </if>
+        <if test="typeName!=null and typeName!=''">
+            AND type_name = #{typeName}
+        </if>
+        <if test="typeDesc!=null and typeDesc!=''">
+            AND type_desc = #{typeDesc}
+        </if>
+        <if test="dictOrTree!=null and dictOrTree!=''">
+            AND dict_or_tree = #{dictOrTree}
+        </if>
+        <if test="createUser!=null and createUser!=''">
+            AND create_user = #{createUser}
+        </if>
+        <if test="createName!=null and createName!=''">
+            AND create_name = #{createName}
+        </if>
+        <if test="createTime!=null and createTime!=''">
+            AND create_time = #{createTime}
+        </if>
+        <if test="createTimeBegin!=null and createTimeBegin!=''">
+            AND create_time &gt;= #{createTimeBegin}
+        </if>
+        <if test="createTimeEnd!=null and createTimeEnd!=''">
+            AND create_time &lt;= #{createTimeEnd}
+        </if>
+        <if test="updateUser!=null and updateUser!=''">
+            AND update_user = #{updateUser}
+        </if>
+        <if test="updateName!=null and updateName!=''">
+            AND update_name = #{updateName}
+        </if>
+        <if test="updateTime!=null and updateTime!=''">
+            AND update_time = #{updateTime}
+        </if>
+        <if test="updateTimeBegin!=null and updateTimeBegin!=''">
+            AND update_time &gt;= #{updateTimeBegin}
+        </if>
+        <if test="updateTimeEnd!=null and updateTimeEnd!=''">
+            AND update_time &lt;= #{updateTimeEnd}
+        </if>
+    </sql>
+
+    <!-- 通用查询 -->
+    <select id="baseListQuery" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM
+        tbl_sys_code_type t
+        <include refid="Base_Where_List"/>
+        <if test="sort !=null and sort !=''">
+            order by ${sort} desc
+        </if>
+        <if test="limit!=null and limit!=''">
+            limit ${limit}
+        </if>
+    </select>
+
+</mapper>
