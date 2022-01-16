@@ -258,6 +258,8 @@ public class CommonTest {
 
     /**
      * 使用Stream流 根据实体属性 分组
+     *
+     * 注意：Collectors.groupingBy()默认是用 HashMap 存放分组后的结果，但是由于HashMap是无序的，所以最终分组后的结果顺序与原数据的顺序不一致，所以应该使用 LinkedHashMap 保存分组的数据
      */
     @Test
     public void testGroupBy() {
@@ -268,8 +270,13 @@ public class CommonTest {
         listUser.add(e1);
         listUser.add(e2);
         listUser.add(e3);
-        Map<String, List<Employee>> collect = listUser.stream().collect(Collectors.groupingBy(Employee::getName));
-        System.out.println(collect);
+        System.out.println("原数据："+JSONObject.toJSONString(listUser));
+
+        Map<String, List<Employee>> groupDisorder = listUser.stream().collect(Collectors.groupingBy(Employee::getName));
+        System.out.println("无序："+JSONObject.toJSONString(groupDisorder));
+
+        Map<String, List<Employee>> groupOrder = listUser.stream().collect(Collectors.groupingBy(Employee::getName, LinkedHashMap::new, Collectors.toList()));
+        System.out.println("有序："+JSONObject.toJSONString(groupOrder));
     }
 
     /**
