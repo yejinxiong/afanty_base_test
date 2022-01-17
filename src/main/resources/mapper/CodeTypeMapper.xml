@@ -9,6 +9,7 @@
         <result column="type_name" property="typeName" />
         <result column="type_desc" property="typeDesc" />
         <result column="dict_or_tree" property="dictOrTree" />
+        <result column="remark" property="remark" />
         <result column="delete_flag" property="deleteFlag" />
         <result column="create_user" property="createUser" />
         <result column="create_name" property="createName" />
@@ -20,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type_code, type_name, type_desc, dict_or_tree, delete_flag, create_user, create_name, create_time, update_user, update_name, update_time
+        id, type_code, type_name, type_desc, dict_or_tree, remark, delete_flag, create_user, create_name, create_time, update_user, update_name, update_time
     </sql>
 
     <!-- 通用查询条件列 -->
@@ -35,11 +36,17 @@
         <if test="typeName!=null and typeName!=''">
             AND type_name = #{typeName}
         </if>
+        <if test="typeNameDim!=null and typeNameDim!=''">
+            AND type_name like concat("%", #{typeNameDim}, "%")
+        </if>
         <if test="typeDesc!=null and typeDesc!=''">
             AND type_desc = #{typeDesc}
         </if>
         <if test="dictOrTree!=null and dictOrTree!=''">
             AND dict_or_tree = #{dictOrTree}
+        </if>
+        <if test="remark!=null and remark!=''">
+            AND remark = #{remark}
         </if>
         <if test="createUser!=null and createUser!=''">
             AND create_user = #{createUser}

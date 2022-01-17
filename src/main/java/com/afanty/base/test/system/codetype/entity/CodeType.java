@@ -48,6 +48,10 @@ public class CodeType extends Model<CodeType> {
     @TableField("dict_or_tree")
     private Integer dictOrTree;
 
+    @ApiModelProperty("备注")
+    @TableField("remark")
+    private String remark;
+
     @ApiModelProperty("是否删除：1-是，2-否")
     @TableField("delete_flag")
     @TableLogic
