@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.afanty.base.test.system.dict.mapper.DictMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.afanty.base.test.system.dict.entity.Dict">
+        <id column="id" property="id" />
+        <result column="dict_name" property="dictName" />
+        <result column="dict_value" property="dictValue" />
+        <result column="type_code" property="typeCode" />
+        <result column="dict_keyword" property="dictKeyword" />
+        <result column="pinyin_code" property="pinyinCode" />
+        <result column="sort_no" property="sortNo" />
+        <result column="remark" property="remark" />
+        <result column="delete_flag" property="deleteFlag" />
+        <result column="enable_flag" property="enableFlag" />
+        <result column="create_user" property="createUser" />
+        <result column="create_name" property="createName" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_name" property="updateName" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, dict_name, dict_value, type_code, dict_keyword, pinyin_code, sort_no, remark, delete_flag, enable_flag, create_user, create_name, create_time, update_user, update_name, update_time
+    </sql>
+
+    <!-- 通用查询条件列 -->
+    <sql id="Base_Where_List">
+        WHERE delete_flag = 2
+        <if test="id!=null and id!=''">
+            AND id = #{id}
+        </if>
+        <if test="dictName!=null and dictName!=''">
+            AND dict_name = #{dictName}
+        </if>
+        <if test="dictNameDim!=null and dictNameDim!=''">
+            AND dict_name like concat("%", #{dictNameDim}, "%")
+        </if>
+        <if test="dictValue!=null and dictValue!=''">
+            AND dict_value = #{dictValue}
+        </if>
+        <if test="typeCode!=null and typeCode!=''">
+            AND type_code = #{typeCode}
+        </if>
+        <if test="dictKeyword!=null and dictKeyword!=''">
+            AND dict_keyword = #{dictKeyword}
+        </if>
+        <if test="pinyinCode!=null and pinyinCode!=''">
+            AND pinyin_code = #{pinyinCode}
+        </if>
+        <if test="sortNo!=null and sortNo!=''">
+            AND sort_no = #{sortNo}
+        </if>
+        <if test="remark!=null and remark!=''">
+            AND remark = #{remark}
+        </if>
+        <if test="enableFlag!=null and enableFlag!=''">
+            AND enable_flag = #{enableFlag}
+        </if>
+        <if test="createUser!=null and createUser!=''">
+            AND create_user = #{createUser}
+        </if>
+        <if test="createName!=null and createName!=''">
+            AND create_name = #{createName}
+        </if>
+        <if test="createTime!=null and createTime!=''">
+            AND create_time = #{createTime}
+        </if>
+        <if test="createTimeBegin!=null and createTimeBegin!=''">
+            AND create_time &gt;= #{createTimeBegin}
+        </if>
+        <if test="createTimeEnd!=null and createTimeEnd!=''">
+            AND create_time &lt;= #{createTimeEnd}
+        </if>
+        <if test="updateUser!=null and updateUser!=''">
+            AND update_user = #{updateUser}
+        </if>
+        <if test="updateName!=null and updateName!=''">
+            AND update_name = #{updateName}
+        </if>
+        <if test="updateTime!=null and updateTime!=''">
+            AND update_time = #{updateTime}
+        </if>
+        <if test="updateTimeBegin!=null and updateTimeBegin!=''">
+            AND update_time &gt;= #{updateTimeBegin}
+        </if>
+        <if test="updateTimeEnd!=null and updateTimeEnd!=''">
+            AND update_time &lt;= #{updateTimeEnd}
+        </if>
+    </sql>
+
+    <!-- 通用查询 -->
+    <select id="baseListQuery" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM
+        tbl_sys_dict t
+        <include refid="Base_Where_List"/>
+        <if test="sort !=null and sort !=''">
+            order by ${sort} desc
+        </if>
+        <if test="limit!=null and limit!=''">
+            limit ${limit}
+        </if>
+    </select>
+
+    <!-- 通用数量查询 -->
+    <select id="baseCountQuery" resultType="int">
+        SELECT count(1)
+        FROM tbl_sys_dict t
+        <include refid="Base_Where_List"/>
+        <if test="limit!=null and limit!=''">
+            limit ${limit}
+        </if>
+    </select>
+
+</mapper>
