@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 字典/树类型
+ * 字典类型
  * </p>
  *
  * @author yejx
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Setter
 @Accessors(chain = true)
 @TableName("tbl_sys_code_type")
-@ApiModel(value = "CodeType对象", description = "字典/树类型")
+@ApiModel(value = "CodeType对象", description = "字典类型")
 public class CodeType extends Model<CodeType> {
 
     private static final long serialVersionUID = 1L;

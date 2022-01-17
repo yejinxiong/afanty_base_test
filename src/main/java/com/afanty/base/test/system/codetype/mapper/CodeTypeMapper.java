@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 字典/树类型 Mapper 接口
+ * 字典类型 Mapper 接口
  * </p>
  *
  * @author yejx
@@ -24,4 +24,11 @@ public interface CodeTypeMapper extends BaseMapper<CodeType> {
      */
     List<CodeType> baseListQuery(Map<String, Object> param);
 
+    /**
+     * 通用数量查询
+     *
+     * @param param
+     * @return
+     */
+    int baseCountQuery(Map<String, Object> param);
 }

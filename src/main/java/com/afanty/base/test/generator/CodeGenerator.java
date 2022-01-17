@@ -20,6 +20,9 @@ public class CodeGenerator {
     private static String url = "jdbc:mysql://127.0.0.1:3306/afanty_test?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&rewriteBatchedStatements=true";
     private static String username = "root";
     private static String password = "root";
+    private static String tableName = "tbl_sys_dict";
+    private static String parentPackage = "com.afanty.base.test.system";
+    private static String moduleName = "dict";
     private static String outputDir = System.getProperty("user.dir") + "/src/main/java";
     private static String mapperXmlDir = System.getProperty("user.dir") + "/src/main/resources/mapper";
 
@@ -34,8 +37,8 @@ public class CodeGenerator {
                         .enableSwagger()
                         .dateType(DateType.TIME_PACK)
                         .commentDate("yyyy-MM-dd HH:mm:ss"))
-                .packageConfig(builder -> builder.parent("com.afanty.base.test.system")
-                        .moduleName("codetype")
+                .packageConfig(builder -> builder.parent(parentPackage)
+                        .moduleName(moduleName)
                         .entity("entity")
 //                            .service("service")
                         .serviceImpl("service")
@@ -47,9 +50,9 @@ public class CodeGenerator {
                 .strategyConfig(builder -> builder.enableCapitalMode()
                         .enableSkipView()
                         .disableSqlFilter()
-                        .likeTable(new LikeTable("tbl_sys_code_type"))
+                        .likeTable(new LikeTable(tableName))
 //                            .notLikeTable(new LikeTable(""))
-                        .addInclude("tbl_sys_code_type")
+                        .addInclude(tableName)
 //                            .addExclude("")
                         .addTablePrefix("tbl_sys_")
 //                            .addTableSuffix("")
@@ -91,7 +94,7 @@ public class CodeGenerator {
 
                         .mapperBuilder()
                         .superClass(BaseMapper.class)
-                        .enableMapperAnnotation()
+//                        .enableMapperAnnotation()
                         .enableBaseResultMap()
                         .enableBaseColumnList()
 //                            .cache(MyMapperCache.class)

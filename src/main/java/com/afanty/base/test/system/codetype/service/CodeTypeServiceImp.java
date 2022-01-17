@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 字典/树类型 服务实现类
+ * 字典类型 服务实现类
  * </p>
  *
  * @author yejx
@@ -30,4 +30,13 @@ public class CodeTypeServiceImp extends ServiceImpl<CodeTypeMapper, CodeType> im
         return this.baseMapper.baseListQuery(param);
     }
 
+    /**
+     * 通用查询数量
+     *
+     * @param param
+     * @return
+     */
+    public int baseCountQuery(Map<String, Object> param) {
+        return this.baseMapper.baseCountQuery(param);
+    }
 }

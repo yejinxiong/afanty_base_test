@@ -99,4 +99,14 @@
         </if>
     </select>
 
+    <!-- 通用数量查询 -->
+    <select id="baseCountQuery" resultType="int">
+        SELECT count(1)
+        FROM tbl_sys_code_type t
+        <include refid="Base_Where_List"/>
+        <if test="limit!=null and limit!=''">
+            limit ${limit}
+        </if>
+    </select>
+
 </mapper>
