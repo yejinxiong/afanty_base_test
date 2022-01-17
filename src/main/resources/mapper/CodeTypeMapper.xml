@@ -11,6 +11,7 @@
         <result column="dict_or_tree" property="dictOrTree" />
         <result column="remark" property="remark" />
         <result column="delete_flag" property="deleteFlag" />
+        <result column="enable_flag" property="enableFlag" />
         <result column="create_user" property="createUser" />
         <result column="create_name" property="createName" />
         <result column="create_time" property="createTime" />
@@ -21,7 +22,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type_code, type_name, type_desc, dict_or_tree, remark, delete_flag, create_user, create_name, create_time, update_user, update_name, update_time
+        id, type_code, type_name, type_desc, dict_or_tree, remark, delete_flag, enable_flag, create_user, create_name, create_time, update_user, update_name, update_time
     </sql>
 
     <!-- 通用查询条件列 -->
@@ -47,6 +48,9 @@
         </if>
         <if test="remark!=null and remark!=''">
             AND remark = #{remark}
+        </if>
+        <if test="enableFlag!=null and enableFlag!=''">
+            AND enable_flag = #{enableFlag}
         </if>
         <if test="createUser!=null and createUser!=''">
             AND create_user = #{createUser}

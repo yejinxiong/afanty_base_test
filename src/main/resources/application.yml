@@ -36,7 +36,7 @@ mybatis-plus:
     banner: false # 是否控制台 print mybatis-plus 的 LOGO，默认true
     db-config:
       id-type: ASSIGN_ID  # 主键生成策略
-      logic-delete-field: is_delete # 逻辑删除的字段
+      logic-delete-field: delete_flag # 逻辑删除的字段
       logic-delete-value: 1 # 逻辑删除的值，默认1，调用删除api时修改is_delete=1
       logic-not-delete-value: 0 # 逻辑未删除值，默认0，查询时只查is_delete=0的数据
       table-underline: true # 表名是否使用驼峰转下划线命名,只对表名生效，默认true
