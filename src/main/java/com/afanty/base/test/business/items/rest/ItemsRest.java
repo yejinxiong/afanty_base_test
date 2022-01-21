@@ -3,6 +3,7 @@ package com.afanty.base.test.business.items.rest;
 
 import com.afanty.base.test.business.items.entity.Items;
 import com.afanty.base.test.business.items.service.ItemsServiceImpl;
+import com.afanty.base.test.common.annotation.ApiIdempotent;
 import com.afanty.base.test.common.utils.OkHttpUtil;
 import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.PageResult;
@@ -64,6 +65,7 @@ public class ItemsRest {
     @Resource(name = "itemsServiceImpl")
     private ItemsServiceImpl itemsService;
 
+    @ApiIdempotent(serviceClass = ItemsServiceImpl.class, method = "baseListQuery", param = "{\"limit\": 2}")
     @ApiOperation(value = "条件查询评分项表", notes = "条件查询评分项表", response = ResponseResult.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
