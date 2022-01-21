@@ -2,9 +2,14 @@ package com.afanty.base.test.common.aop;
 
 import com.afanty.base.test.common.annotation.ApiIdempotent;
 import com.afanty.base.test.common.utils.JsonUtil;
+import com.afanty.base.test.common.utils.SpringUtil;
+import com.afanty.base.test.common.web.MsgCode;
+import com.afanty.base.test.common.web.ResponseResult;
+import com.afanty.base.test.common.web.StatusCode;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -14,10 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 接口幂等性注解的AOP
@@ -54,34 +63,35 @@ public class ApiIdempotentAop implements Ordered {
      * @param joinPoint
      * @return
      */
+    @SuppressWarnings("unchecked")
     @Around("cut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         Signature signature = joinPoint.getSignature();
         if (!(signature instanceof MethodSignature)) {
             throw new IllegalArgumentException("该注解只能用于方法");
         }
+        MethodSignature methodSignature = (MethodSignature) signature;
         ApiIdempotent apiIdempotent = this.getApiIdempotent(joinPoint);
         if (Objects.nonNull(apiIdempotent)) {
-            LOGGER.info("ApiIdempotentAop running：{}", ((MethodSignature) signature).getMethod());
-            String method = apiIdempotent.method();
-            String paramStr = apiIdempotent.param();
-            Map<String, Object> paramMap;
-            if (StringUtils.isBlank(paramStr)) {
-                LOGGER.error("ApiIdempotent param不能为空");
-                return false;
-            } else if (!JsonUtil.isJsonStr(paramStr)) {
-                LOGGER.error("ApiIdempotent param必须为json格式");
-                return false;
-            } else {
-                paramMap = JSONObject.parseObject(paramStr);
+            LOGGER.info("ApiIdempotentAop running：{}", methodSignature.getMethod());
+            // 获取幂等注解需要的字段，并从接口参数获取对应的值
+            Map<String, Object> paramMap = new HashMap<>();
+            String fields = apiIdempotent.fields();
+            String[] names = fields.split(",");
+            Object[] args = joinPoint.getArgs();
+            // 根据字段名获取字段值
+            for (String name : names) {
+
             }
-            if (StringUtils.isBlank(method)) {
-                LOGGER.error("ApiIdempotent method不能为空");
-                return false;
-            } else {
-                List list = this.invokeService(apiIdempotent, paramMap);
-
-
+            if (!paramMap.isEmpty()) {
+                // 调用对应的service方法
+                int count= this.invokeService(apiIdempotent, paramMap);
+                if (count > 0) {
+                    LOGGER.error("ApiIdempotentAop：请勿重复操作");
+                    return new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), "请勿重复操作", null);
+                } else {
+                    LOGGER.info("ApiIdempotentAop：允许操作");
+                }
             }
         }
         try {
@@ -117,12 +127,14 @@ public class ApiIdempotentAop implements Ordered {
         ApiIdempotent apiIdempotent = targetClass.getAnnotation(ApiIdempotent.class);
         // 2. 如果类上面没有这个注解，再从方法上获取
         if (Objects.isNull(apiIdempotent)) {
+//            // 获取方法上的注解，方案一
 //            try {
 //                Method method = targetClass.getMethod(methodSignature.getName(), methodSignature.getParameterTypes());
 //                apiIdempotent = method.getAnnotation(ApiIdempotent.class);
 //            } catch (NoSuchMethodException e) {
 //                LOGGER.error("获取幂等性接口注解异常：{}", e.getMessage());
 //            }
+            // 获取方法上的注解，方案二
             Method method = methodSignature.getMethod();
             apiIdempotent = method.getAnnotation(ApiIdempotent.class);
         }
@@ -131,32 +143,30 @@ public class ApiIdempotentAop implements Ordered {
 
     /**
      * 调用service方法
+     *
      * @param apiIdempotent
      * @param paramMap
      * @return
      */
     @SuppressWarnings("unchecked")
-    public List invokeService(ApiIdempotent apiIdempotent, Map<String, Object> paramMap) {
-        List list = new ArrayList();
+    public int invokeService(ApiIdempotent apiIdempotent, Map<String, Object> paramMap) {
+        int count = 0;
         try {
+            // 要执行的方法所在的类
             Class serviceClass = apiIdempotent.serviceClass();
-            // 获取指定的方法
-            String method = apiIdempotent.method();
-            Method declaredMethod = serviceClass.getDeclaredMethod(method, Map.class);
-            // 获取service对象
-            Object servicObj = serviceClass.newInstance();
-            Object invoke = declaredMethod.invoke(servicObj, paramMap);
-            System.out.println(invoke);
+            // 要执行的方法的名称
+            String methodName = apiIdempotent.methodName();
+            // 通过类获取指定名称的方法
+            Method method = serviceClass.getDeclaredMethod(methodName, Map.class);
+            count = (int) method.invoke(SpringUtil.getBean(serviceClass), paramMap);
         } catch (NoSuchMethodException e) {
-            LOGGER.error("NoSuchMethodException：{}", e.getMessage());
-        } catch (InstantiationException e) {
-            LOGGER.error("InstantiationException：{}", e.getMessage());
+            LOGGER.error("ApiIdempotentAop invokeService() NoSuchMethodException：{}", e.getMessage());
         } catch (IllegalAccessException e) {
-            LOGGER.error("IllegalAccessException：{}", e.getMessage());
+            LOGGER.error("ApiIdempotentAop invokeService() IllegalAccessException：{}", e.getMessage());
         } catch (InvocationTargetException e) {
-            LOGGER.error("InvocationTargetException：{}", e.getMessage());
+            LOGGER.error("ApiIdempotentAop invokeService() InvocationTargetException：{}", e.getMessage());
         }
-        return list;
+        return count;
     }
 
     /**

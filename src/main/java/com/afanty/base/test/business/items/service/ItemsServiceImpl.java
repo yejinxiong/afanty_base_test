@@ -31,6 +31,16 @@ public class ItemsServiceImpl extends ServiceImpl<ItemsMapper, Items> implements
     }
 
     /**
+     * 验证是否重复
+     *
+     * @param param
+     * @return
+     */
+    public int validRepeat(Map<String, Object> param) {
+        return this.baseMapper.validRepeat(param);
+    }
+
+    /**
      * 通用查询数量
      *
      * @param param

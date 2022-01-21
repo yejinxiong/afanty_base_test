@@ -33,9 +33,11 @@ import java.util.Map;
 @Target(ElementType.METHOD)
 public @interface ApiIdempotent {
 
+    public String methodName();
+
+    public String fields();
+
     public Class serviceClass();
 
-    public String method();
-
-    public String param() default "{\"limit\": 1}";
+    public Class clazz();
 }

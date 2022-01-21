@@ -65,7 +65,6 @@ public class ItemsRest {
     @Resource(name = "itemsServiceImpl")
     private ItemsServiceImpl itemsService;
 
-    @ApiIdempotent(serviceClass = ItemsServiceImpl.class, method = "baseListQuery", param = "{\"limit\": 2}")
     @ApiOperation(value = "条件查询评分项表", notes = "条件查询评分项表", response = ResponseResult.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
@@ -131,6 +130,7 @@ public class ItemsRest {
         return rr;
     }
 
+    @ApiIdempotent(methodName = "validRepeat", fields = "itemsName", serviceClass = ItemsServiceImpl.class, clazz = Items.class)
     @ApiOperation(value = "新建", notes = "新建", response = ResponseResult.class)
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(Items items) {
@@ -145,7 +145,7 @@ public class ItemsRest {
             LocalDateTime currentDateTime = LocalDateTime.now();
             this.setCreateInfo(items, currentDateTime);
             this.setUpdateInfo(items, currentDateTime);
-            itemsService.save(items);
+//            itemsService.save(items);
         } catch (Exception e) {
             LOGGER.error("新建错误：{}", e.getMessage());
             rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
@@ -302,7 +302,7 @@ public class ItemsRest {
         }
         try {
             itemsService.updateById(items);
-            int i = 1/0;
+            int i = 1 / 0;
 
             Map<String, String> param = new HashMap<>();
             param.put("itemsId", "01a4d6dd5ace4e1cbf56c31d3dd698a4");
