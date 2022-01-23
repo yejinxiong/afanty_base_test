@@ -1,13 +1,11 @@
 package com.afanty.base.test.system.codetype.rest;
 
 
-import com.afanty.base.test.common.annotation.ApiIdempotent;
 import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
 import com.afanty.base.test.system.codetype.entity.CodeType;
 import com.afanty.base.test.system.codetype.service.CodeTypeServiceImp;
-import com.afanty.base.test.system.codetype.web.CodeTypeResponseCode;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -56,7 +55,7 @@ public class CodeTypeRest {
         return rr;
     }
 
-    @ApiIdempotent(fields = "typeCode", serviceClass = CodeTypeServiceImp.class, clazz = CodeType.class, errMsg = "编码已存在")
+    //    @ApiIdempotent(fields = "typeCode", serviceClass = CodeTypeServiceImp.class, clazz = CodeType.class, errMsg = "编码已存在")
     @ApiOperation(value = "新增字典类型", notes = "新增字典类型", response = ResponseResult.class)
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(CodeType codeType) {
@@ -64,20 +63,33 @@ public class CodeTypeRest {
         LOGGER.info("新增字典类型, 参数：{}", paramJson);
         ResponseResult rr = new ResponseResult();
         if (StringUtils.isBlank(paramJson) || "{}".equals(paramJson)) {
-            rr.setStatus(CodeTypeResponseCode.CODE_6001.getKey());
-            rr.setMsg(CodeTypeResponseCode.CODE_6001.getDesc());
+            rr.setStatus(StatusCode.CODE_1001.getKey());
+            rr.setMsg(StatusCode.CODE_1001.getDesc());
             return rr;
         }
+        String typeCode = codeType.getTypeCode();
         try {
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            this.setCreateInfo(codeType, currentDateTime);
-            this.setUpdateInfo(codeType, currentDateTime);
-            // 验证幂等是否有效
-            System.out.println(Thread.currentThread().getName() + "进入休眠");
-            Thread.sleep(1000);
-            System.out.println(Thread.currentThread().getName() + "解除休眠");
-            codeTypeService.save(codeType);
-            rr.setData(codeType);
+            synchronized (typeCode.intern()) {
+                LOGGER.info("[{}] 开始", typeCode);
+                // 验证幂等是否有效
+                Map<String, Object> param = new HashMap<>();
+                param.put("typeCode", typeCode);
+                int count = codeTypeService.baseCountQuery(param);
+                if (count > 0) {
+                    rr.setStatus(StatusCode.CODE_1000.getKey());
+                    rr.setMsg("该类型编码已存在");
+                    LOGGER.info("[{}] 该类型编码已存在", typeCode);
+                } else {
+                    LocalDateTime currentDateTime = LocalDateTime.now();
+                    this.setCreateInfo(codeType, currentDateTime);
+                    this.setUpdateInfo(codeType, currentDateTime);
+                    codeTypeService.save(codeType);
+                    rr.setData(codeType);
+                    rr.setMsg("操作完成");
+                    LOGGER.info("[{}] {}", typeCode, "操作完成");
+                }
+                LOGGER.info("[{}] 结束", typeCode);
+            }
         } catch (Exception e) {
             LOGGER.error("新增字典类型异常：{}", e.getMessage());
             rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
