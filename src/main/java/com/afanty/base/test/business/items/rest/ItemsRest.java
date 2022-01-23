@@ -3,7 +3,7 @@ package com.afanty.base.test.business.items.rest;
 
 import com.afanty.base.test.business.items.entity.Items;
 import com.afanty.base.test.business.items.service.ItemsServiceImpl;
-import com.afanty.base.test.common.annotation.ApiIdempotent;
+import com.afanty.base.test.common.annotation.NotNull;
 import com.afanty.base.test.common.utils.OkHttpUtil;
 import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.PageResult;
@@ -11,33 +11,17 @@ import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * <p>
@@ -130,17 +114,13 @@ public class ItemsRest {
         return rr;
     }
 
-    @ApiIdempotent(fields = "itemsName", serviceClass = ItemsServiceImpl.class, clazz = Items.class)
+    //    @ApiIdempotent(fields = "itemsName", serviceClass = ItemsServiceImpl.class, clazz = Items.class)
+    @NotNull(fields = "itemsName", entityClass = Items.class)
     @ApiOperation(value = "新建", notes = "新建", response = ResponseResult.class)
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(Items items) {
         LOGGER.info("新建, 参数：{}", JSONObject.toJSONString(items));
         ResponseResult rr = new ResponseResult();
-        if (items == null) {
-            rr.setStatus(StatusCode.CODE_1000.getKey());
-            rr.setMsg(StatusCode.CODE_1000.getDesc());
-            return rr;
-        }
         try {
             LocalDateTime currentDateTime = LocalDateTime.now();
             this.setCreateInfo(items, currentDateTime);

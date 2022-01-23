@@ -1,6 +1,7 @@
 package com.afanty.base.test.system.codetype.rest;
 
 
+import com.afanty.base.test.common.annotation.NotNull;
 import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
@@ -11,7 +12,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -56,17 +56,13 @@ public class CodeTypeRest {
     }
 
     //    @ApiIdempotent(fields = "typeCode", serviceClass = CodeTypeServiceImp.class, clazz = CodeType.class, errMsg = "编码已存在")
+    @NotNull(fields = "typeCode,typeName,dictOrTree,enableFlag", entityClass = CodeType.class)
     @ApiOperation(value = "新增字典类型", notes = "新增字典类型", response = ResponseResult.class)
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(CodeType codeType) {
         String paramJson = JSONObject.toJSONString(codeType);
         LOGGER.info("新增字典类型, 参数：{}", paramJson);
         ResponseResult rr = new ResponseResult();
-        if (StringUtils.isBlank(paramJson) || "{}".equals(paramJson)) {
-            rr.setStatus(StatusCode.CODE_1001.getKey());
-            rr.setMsg(StatusCode.CODE_1001.getDesc());
-            return rr;
-        }
         String typeCode = codeType.getTypeCode();
         try {
             synchronized (typeCode.intern()) {

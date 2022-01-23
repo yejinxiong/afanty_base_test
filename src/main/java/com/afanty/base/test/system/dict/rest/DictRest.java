@@ -1,20 +1,18 @@
 package com.afanty.base.test.system.dict.rest;
 
 
-import com.afanty.base.test.common.annotation.ApiIdempotent;
+import com.afanty.base.test.common.annotation.NotNull;
 import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
 import com.afanty.base.test.system.codetype.service.CodeTypeServiceImp;
 import com.afanty.base.test.system.dict.entity.Dict;
 import com.afanty.base.test.system.dict.service.DictServiceImp;
-import com.afanty.base.test.system.dict.web.DictResponseCode;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -61,32 +59,17 @@ public class DictRest {
         return rr;
     }
 
-    @ApiIdempotent(fields = "typeCode,dictValue", serviceClass = DictServiceImp.class, clazz = Dict.class, errMsg = "该字典值已存在")
+    //    @ApiIdempotent(fields = "typeCode,dictValue", serviceClass = DictServiceImp.class, clazz = Dict.class, errMsg = "该字典值已存在")
+    @NotNull(fields = "typeCode,dictName,dictValue", entityClass = Dict.class)
     @ApiOperation(value = "新增字典", notes = "新增字典", response = ResponseResult.class)
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(Dict dict) {
         String paramJson = JSONObject.toJSONString(dict);
         LOGGER.info("新增字典, 参数：{}", paramJson);
         ResponseResult rr = new ResponseResult();
-        if (StringUtils.isBlank(paramJson) || "{}".equals(paramJson)) {
-            rr.setStatus(DictResponseCode.CODE_5001.getKey());
-            rr.setMsg(DictResponseCode.CODE_5001.getDesc());
-            return rr;
-        } else if (StringUtils.isBlank(dict.getTypeCode())) {
-            rr.setStatus(DictResponseCode.CODE_5002.getKey());
-            rr.setMsg(DictResponseCode.CODE_5002.getDesc());
-            return rr;
-        } else if (StringUtils.isBlank(dict.getDictName())) {
-            rr.setStatus(DictResponseCode.CODE_5003.getKey());
-            rr.setMsg(DictResponseCode.CODE_5003.getDesc());
-            return rr;
-        } else if (StringUtils.isBlank(dict.getDictValue())) {
-            rr.setStatus(DictResponseCode.CODE_5004.getKey());
-            rr.setMsg(DictResponseCode.CODE_5004.getDesc());
-            return rr;
-        } else if (dict.getSortNo() > 1000) {
-            rr.setStatus(DictResponseCode.CODE_5005.getKey());
-            rr.setMsg(DictResponseCode.CODE_5005.getDesc());
+        if (dict.getSortNo() > 1000) {
+            rr.setStatus(StatusCode.CODE_1000.getKey());
+            rr.setMsg("排序号最大为1000");
             return rr;
         }
         try {
