@@ -31,4 +31,5 @@ public interface CodeTypeMapper extends BaseMapper<CodeType> {
      * @return
      */
     int baseCountQuery(Map<String, Object> param);
+
 }

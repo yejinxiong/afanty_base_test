@@ -39,4 +39,5 @@ public class CodeTypeServiceImp extends ServiceImpl<CodeTypeMapper, CodeType> im
     public int baseCountQuery(Map<String, Object> param) {
         return this.baseMapper.baseCountQuery(param);
     }
+
 }

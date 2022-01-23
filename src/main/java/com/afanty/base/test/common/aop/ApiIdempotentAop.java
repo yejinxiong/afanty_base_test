@@ -1,15 +1,11 @@
 package com.afanty.base.test.common.aop;
 
 import com.afanty.base.test.common.annotation.ApiIdempotent;
-import com.afanty.base.test.common.utils.JsonUtil;
 import com.afanty.base.test.common.utils.SpringUtil;
 import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -19,14 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 接口幂等性注解的AOP
@@ -59,6 +55,9 @@ public class ApiIdempotentAop implements Ordered {
 
     /**
      * 执行中的切入操作
+     * <p>
+     * 通过@ApiIdempotent注解指定传哪些字段、调用哪个类的哪个方法去判断是否重复操作，
+     * 需要解决如何将注解所标注的方法的参数赋值给指定的字段
      *
      * @param joinPoint
      * @return
@@ -67,28 +66,44 @@ public class ApiIdempotentAop implements Ordered {
     @Around("cut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         Signature signature = joinPoint.getSignature();
+        LOGGER.info("ApiIdempotentAop running...");
+        // 1. 判断注解是否标注在方法上
         if (!(signature instanceof MethodSignature)) {
             throw new IllegalArgumentException("该注解只能用于方法");
         }
-        MethodSignature methodSignature = (MethodSignature) signature;
+        LOGGER.info("ApiIdempotentAop api：{}", ((MethodSignature)signature).getMethod());
+        // 2. 获取方法上的注解
         ApiIdempotent apiIdempotent = this.getApiIdempotent(joinPoint);
         if (Objects.nonNull(apiIdempotent)) {
-            LOGGER.info("ApiIdempotentAop running：{}", methodSignature.getMethod());
-            // 获取幂等注解需要的字段，并从接口参数获取对应的值
             Map<String, Object> paramMap = new HashMap<>();
+            // 3. 获取幂等注解需要的字段
             String fields = apiIdempotent.fields();
             String[] names = fields.split(",");
+            // 4. 获取注解所标注的方法的参数
             Object[] args = joinPoint.getArgs();
+            // 5. 获取指定参数类型
+            Class clazz = apiIdempotent.clazz();
+            // 6. 筛选参数中类型为指定类型的参数
+            Object object = Arrays.stream(args).filter(arg -> arg.getClass() == clazz).findFirst().orElse(Object.class);
+            Class<?> aClass = object.getClass();
             // 根据字段名获取字段值
             for (String name : names) {
-
+                Field declaredField = aClass.getDeclaredField(name);
+                // 设置对象的访问权限，保证对private的属性的访问
+                declaredField.setAccessible(true);
+                Object fieldValue = declaredField.get(object);
+                if (Objects.nonNull(fieldValue)) {
+                    paramMap.put(name, fieldValue);
+                } else {
+                    LOGGER.info("ApiIdempotentAop 参数{}的值为空", name);
+                }
             }
             if (!paramMap.isEmpty()) {
                 // 调用对应的service方法
-                int count= this.invokeService(apiIdempotent, paramMap);
+                int count = this.invokeService(apiIdempotent, paramMap);
                 if (count > 0) {
-                    LOGGER.error("ApiIdempotentAop：请勿重复操作");
-                    return new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), "请勿重复操作", null);
+                    LOGGER.error("ApiIdempotentAop：{}", apiIdempotent.errMsg());
+                    return new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), apiIdempotent.errMsg(), null);
                 } else {
                     LOGGER.info("ApiIdempotentAop：允许操作");
                 }

@@ -33,14 +33,6 @@ public interface ItemsMapper extends BaseMapper<Items> {
     int baseCountQuery(Map<String, Object> param);
 
     /**
-     * 验证是否重复
-     *
-     * @param param
-     * @return
-     */
-    int validRepeat(Map<String, Object> param);
-
-    /**
      * 删除itemsId不在内，且未被使用的评分项
      *
      * @param param

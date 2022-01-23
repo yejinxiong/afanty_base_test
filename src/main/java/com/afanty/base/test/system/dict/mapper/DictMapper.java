@@ -31,4 +31,5 @@ public interface DictMapper extends BaseMapper<Dict> {
      * @return
      */
     int baseCountQuery(Map<String, Object> param);
+
 }

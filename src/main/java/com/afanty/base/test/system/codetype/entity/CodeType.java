@@ -52,12 +52,12 @@ public class CodeType extends Model<CodeType> {
     @TableField("remark")
     private String remark;
 
-    @ApiModelProperty("是否删除：1-是，2-否（默认）")
+    @ApiModelProperty("是否删除：1-是，0-否（默认）")
     @TableField("delete_flag")
     @TableLogic
     private Integer deleteFlag;
 
-    @ApiModelProperty("是否启用：1-是（默认），2-否")
+    @ApiModelProperty("是否启用：1-是（默认），0-否")
     @TableField("enable_flag")
     private Integer enableFlag;
 

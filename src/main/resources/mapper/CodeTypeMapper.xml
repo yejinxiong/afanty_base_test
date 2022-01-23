@@ -27,7 +27,7 @@
 
     <!-- 通用查询条件列 -->
     <sql id="Base_Where_List">
-        WHERE delete_flag = 2
+        WHERE delete_flag = 0
         <if test="id!=null and id!=''">
             AND id = #{id}
         </if>

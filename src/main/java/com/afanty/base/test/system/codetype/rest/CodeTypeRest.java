@@ -1,6 +1,7 @@
 package com.afanty.base.test.system.codetype.rest;
 
 
+import com.afanty.base.test.common.annotation.ApiIdempotent;
 import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
@@ -12,13 +13,13 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -55,37 +56,26 @@ public class CodeTypeRest {
         return rr;
     }
 
+    @ApiIdempotent(fields = "typeCode", serviceClass = CodeTypeServiceImp.class, clazz = CodeType.class, errMsg = "编码已存在")
     @ApiOperation(value = "新增字典类型", notes = "新增字典类型", response = ResponseResult.class)
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(CodeType codeType) {
-        LOGGER.info("新增字典类型, 参数：{}", JSONObject.toJSONString(codeType));
+        String paramJson = JSONObject.toJSONString(codeType);
+        LOGGER.info("新增字典类型, 参数：{}", paramJson);
         ResponseResult rr = new ResponseResult();
-        if (codeType == null) {
+        if (StringUtils.isBlank(paramJson) || "{}".equals(paramJson)) {
             rr.setStatus(CodeTypeResponseCode.CODE_6001.getKey());
             rr.setMsg(CodeTypeResponseCode.CODE_6001.getDesc());
             return rr;
         }
         try {
-            Map<String, Object> param = new HashMap<>();
-            param.put("limit", 1);
-            param.put("typeCode", codeType.getTypeCode());
-            int codeTypeExist = codeTypeService.baseCountQuery(param);
-            if (codeTypeExist > 0) {
-                rr.setStatus(CodeTypeResponseCode.CODE_6002.getKey());
-                rr.setMsg(CodeTypeResponseCode.CODE_6002.getDesc());
-                return rr;
-            }
-            param.remove("typeCode");
-            param.put("typeName", codeType.getTypeName());
-            int typeNameExist = codeTypeService.baseCountQuery(param);
-            if (typeNameExist > 0) {
-                rr.setStatus(CodeTypeResponseCode.CODE_6003.getKey());
-                rr.setMsg(CodeTypeResponseCode.CODE_6003.getDesc());
-                return rr;
-            }
             LocalDateTime currentDateTime = LocalDateTime.now();
             this.setCreateInfo(codeType, currentDateTime);
             this.setUpdateInfo(codeType, currentDateTime);
+            // 验证幂等是否有效
+            System.out.println(Thread.currentThread().getName() + "进入休眠");
+            Thread.sleep(1000);
+            System.out.println(Thread.currentThread().getName() + "解除休眠");
             codeTypeService.save(codeType);
             rr.setData(codeType);
         } catch (Exception e) {

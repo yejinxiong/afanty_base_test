@@ -1,6 +1,7 @@
 package com.afanty.base.test.system.dict.rest;
 
 
+import com.afanty.base.test.common.annotation.ApiIdempotent;
 import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -61,12 +61,14 @@ public class DictRest {
         return rr;
     }
 
+    @ApiIdempotent(fields = "typeCode,dictValue", serviceClass = DictServiceImp.class, clazz = Dict.class, errMsg = "该字典值已存在")
     @ApiOperation(value = "新增字典", notes = "新增字典", response = ResponseResult.class)
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(Dict dict) {
-        LOGGER.info("新增字典, 参数：{}", JSONObject.toJSONString(dict));
+        String paramJson = JSONObject.toJSONString(dict);
+        LOGGER.info("新增字典, 参数：{}", paramJson);
         ResponseResult rr = new ResponseResult();
-        if (null == dict) {
+        if (StringUtils.isBlank(paramJson) || "{}".equals(paramJson)) {
             rr.setStatus(DictResponseCode.CODE_5001.getKey());
             rr.setMsg(DictResponseCode.CODE_5001.getDesc());
             return rr;
@@ -88,30 +90,6 @@ public class DictRest {
             return rr;
         }
         try {
-            Map<String, Object> param = new HashMap<>();
-            param.put("limit", 1);
-            param.put("typeCode", dict.getTypeCode());
-            int codeTypeExist = codeTypeService.baseCountQuery(param);
-            if (codeTypeExist <= 0) {
-                rr.setStatus(DictResponseCode.CODE_5006.getKey());
-                rr.setMsg(DictResponseCode.CODE_5006.getDesc());
-                return rr;
-            }
-            param.put("dictName", dict.getDictName());
-            int dictNameRepeat = dictService.baseCountQuery(param);
-            if (dictNameRepeat > 0) {
-                rr.setStatus(DictResponseCode.CODE_5007.getKey());
-                rr.setMsg(DictResponseCode.CODE_5007.getDesc());
-                return rr;
-            }
-            param.remove("dictName");
-            param.put("dictValue", dict.getDictValue());
-            int dictValueRepeat = dictService.baseCountQuery(param);
-            if (dictValueRepeat > 0) {
-                rr.setStatus(DictResponseCode.CODE_5008.getKey());
-                rr.setMsg(DictResponseCode.CODE_5008.getDesc());
-                return rr;
-            }
             LocalDateTime currentDateTime = LocalDateTime.now();
             this.setCreateInfo(dict, currentDateTime);
             this.setUpdateInfo(dict, currentDateTime);

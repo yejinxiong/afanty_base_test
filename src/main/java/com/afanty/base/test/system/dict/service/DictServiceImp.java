@@ -39,4 +39,5 @@ public class DictServiceImp extends ServiceImpl<DictMapper, Dict> implements ISe
     public int baseCountQuery(Map<String, Object> param) {
         return this.baseMapper.baseCountQuery(param);
     }
+
 }
