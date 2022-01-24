@@ -76,18 +76,18 @@ public class NotNullAop {
             // 3. 获取幂等注解需要的字段
             String fields = notNull.fields();
             String[] names = fields.split(",");
-            // 4. 获取注解所标注的方法的参数
-            Object[] args = joinPoint.getArgs();
-            // 5. 获取指定参数类型
-            Class clazz = notNull.entityClass();
-            // 6. 筛选参数中类型为指定类型的参数
-            Object object = Arrays.stream(args).filter(arg -> arg.getClass() == clazz).findFirst().orElse(Object.class);
-            String jsonString = JSONObject.toJSONString(object);
-            if (StringUtils.isNotBlank(jsonString) && !"{}".equals(jsonString)) {
-                Class<?> aClass = object.getClass();
-                List<String> errorList = new ArrayList<>();
-                // 7. 根据字段名获取字段值
-                if (names.length > 0 && StringUtils.isNotBlank(names[0])) {
+            if (names.length > 0 && StringUtils.isNotBlank(names[0])) {
+                // 4. 获取注解所标注的方法的参数
+                Object[] args = joinPoint.getArgs();
+                // 5. 获取指定参数类型
+                Class clazz = notNull.entityClass();
+                // 6. 筛选参数中类型为指定类型的参数
+                Object object = Arrays.stream(args).filter(arg -> arg.getClass() == clazz).findFirst().orElse(Object.class);
+                String jsonString = JSONObject.toJSONString(object);
+                if (StringUtils.isNotBlank(jsonString) && !"{}".equals(jsonString)) {
+                    Class<?> aClass = object.getClass();
+                    List<String> errorList = new ArrayList<>();
+                    // 7. 根据字段名获取字段值
                     for (String name : names) {
                         Field declaredField = aClass.getDeclaredField(name);
                         // 8. 设置对象的访问权限，保证对private的属性的访问
@@ -99,16 +99,16 @@ public class NotNullAop {
                             errorList.add(meaning);
                         }
                     }
+                    // 10. 如果有空值，则直接返回
+                    if (errorList.size() > 0) {
+                        String errorStr = Joiner.on("，").join(errorList);
+                        LOGGER.error("NotNullAop Exception：{}", "字段【" + errorStr + "】不能为空");
+                        return new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_1000.getKey(), "字段【" + errorStr + "】不能为空", null);
+                    }
+                } else {
+                    LOGGER.error("NotNullAop Exception：{}", StatusCode.CODE_1001.getDesc());
+                    return new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_1001.getKey(), StatusCode.CODE_1001.getDesc(), null);
                 }
-                // 10. 如果有空值，则直接返回
-                if (errorList.size() > 0) {
-                    String errorStr = Joiner.on("，").join(errorList);
-                    LOGGER.error("NotNullAop Exception：{}", "字段【" + errorStr + "】不能为空");
-                    return new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_1000.getKey(), "字段【" + errorStr + "】不能为空", null);
-                }
-            } else {
-                LOGGER.error("NotNullAop Exception：{}", StatusCode.CODE_1001.getDesc());
-                return new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_1001.getKey(), StatusCode.CODE_1001.getDesc(), null);
             }
         }
         try {
