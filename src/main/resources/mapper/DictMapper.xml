@@ -4,22 +4,22 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.afanty.base.test.system.dict.entity.Dict">
-        <id column="id" property="id" />
-        <result column="dict_name" property="dictName" />
-        <result column="dict_value" property="dictValue" />
-        <result column="type_code" property="typeCode" />
-        <result column="dict_keyword" property="dictKeyword" />
-        <result column="pinyin_code" property="pinyinCode" />
-        <result column="sort_no" property="sortNo" />
-        <result column="remark" property="remark" />
-        <result column="delete_flag" property="deleteFlag" />
-        <result column="enable_flag" property="enableFlag" />
-        <result column="create_user" property="createUser" />
-        <result column="create_name" property="createName" />
-        <result column="create_time" property="createTime" />
-        <result column="update_user" property="updateUser" />
-        <result column="update_name" property="updateName" />
-        <result column="update_time" property="updateTime" />
+        <id column="id" property="id"/>
+        <result column="dict_name" property="dictName"/>
+        <result column="dict_value" property="dictValue"/>
+        <result column="type_code" property="typeCode"/>
+        <result column="dict_keyword" property="dictKeyword"/>
+        <result column="pinyin_code" property="pinyinCode"/>
+        <result column="sort_no" property="sortNo"/>
+        <result column="remark" property="remark"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="enable_flag" property="enableFlag"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_name" property="createName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_name" property="updateName"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->

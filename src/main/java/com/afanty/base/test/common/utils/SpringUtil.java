@@ -19,13 +19,6 @@ public class SpringUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext = null;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        if (SpringUtil.applicationContext == null) {
-            SpringUtil.applicationContext = applicationContext;
-        }
-    }
-
     /**
      * 获取applicationContext
      *
@@ -33,6 +26,13 @@ public class SpringUtil implements ApplicationContextAware {
      */
     public static ApplicationContext getApplicationContext() {
         return applicationContext;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        if (SpringUtil.applicationContext == null) {
+            SpringUtil.applicationContext = applicationContext;
+        }
     }
 
     /**

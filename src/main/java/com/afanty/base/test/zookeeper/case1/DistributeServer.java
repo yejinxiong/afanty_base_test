@@ -66,7 +66,6 @@ public class DistributeServer {
 
     /**
      * 启动业务逻辑
-     *
      */
     private void doBusiness() throws InterruptedException {
         Thread.sleep(Long.MAX_VALUE);

@@ -2,7 +2,6 @@ package com.afanty.base.test.system.dict.rest;
 
 
 import com.afanty.base.test.common.annotation.NotNull;
-import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
 import com.afanty.base.test.system.codetype.service.CodeTypeServiceImp;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,16 +47,14 @@ public class DictRest {
             @ApiImplicitParam(name = "dictName", value = "字典名称", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "dictValue", value = "字典值", dataType = "String", paramType = "query")})
     @GetMapping(value = "/querylist")
-    public ResponseResult queryList(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
+    public ResponseResult<List<Dict>> queryList(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
         LOGGER.info("条件查询字典表, 参数：{}", JSONObject.toJSONString(param));
-        ResponseResult rr = new ResponseResult();
         try {
-            rr.setData(dictService.baseListQuery(param));
+            return ResponseResult.success(dictService.baseListQuery(param));
         } catch (Exception e) {
             LOGGER.error("条件查询字典表错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     //    @ApiIdempotent(fields = "typeCode,dictValue", serviceClass = DictServiceImp.class, clazz = Dict.class, errMsg = "该字典值已存在")
@@ -76,13 +74,12 @@ public class DictRest {
             LocalDateTime currentDateTime = LocalDateTime.now();
             this.setCreateInfo(dict, currentDateTime);
             this.setUpdateInfo(dict, currentDateTime);
-            dictService.save(dict);
-            rr.setData(dict);
+            boolean successFlag = dictService.save(dict);
+            return ResponseResult.auto(successFlag, dict);
         } catch (Exception e) {
             LOGGER.error("新增字典异常：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     /*-------------------------------------------------- 公共处理方法 --------------------------------------------------*/

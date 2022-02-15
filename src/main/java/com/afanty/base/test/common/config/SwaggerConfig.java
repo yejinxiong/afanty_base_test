@@ -14,14 +14,15 @@ import springfox.documentation.spring.web.plugins.Docket;
 /**
  * <p>
  * Swagger2接口文档引擎 配置类
- * 访问地址：http://127.0.0.1:9000/mp/ac/system/swagger-ui.html
+ * Swagger2访问地址：http://127.0.0.1:9000/afanty/base/test/swagger-ui.html
+ * knife4j访问地址：http://127.0.0.1:9000/afanty/base/test/doc.html
  * </p>
  *
  * @author yejx
  * @date 2020/5/5
  */
 @Configuration
-public class Swagger2Config {
+public class SwaggerConfig {
 
     private static final String VERSION = "1.0.0";
 
@@ -30,6 +31,7 @@ public class Swagger2Config {
 
     /**
      * 说明：这里通过.apis(RequestHandlerSelectors.withClassAnnotation(Api.class))标明给加上@Api注解的类自动生成接口文档
+     *
      * @return
      */
     @Bean
@@ -46,6 +48,7 @@ public class Swagger2Config {
 
     /**
      * 添加摘要信息
+     *
      * @return
      */
     private ApiInfo apiInfo() {

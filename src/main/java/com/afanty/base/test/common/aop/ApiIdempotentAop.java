@@ -71,7 +71,7 @@ public class ApiIdempotentAop implements Ordered {
         if (!(signature instanceof MethodSignature)) {
             throw new IllegalArgumentException("该注解只能用于方法");
         }
-        LOGGER.info("ApiIdempotentAop api：{}", ((MethodSignature)signature).getMethod());
+        LOGGER.info("ApiIdempotentAop api：{}", ((MethodSignature) signature).getMethod());
         // 2. 获取方法上的注解
         ApiIdempotent apiIdempotent = this.getApiIdempotent(joinPoint);
         if (Objects.nonNull(apiIdempotent)) {

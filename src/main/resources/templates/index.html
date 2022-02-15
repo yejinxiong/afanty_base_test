@@ -125,9 +125,9 @@
             searchKey() {
                 let url = 'http://127.0.0.1:9000/afanty/base/test/goodsrest/getpagelist';
                 let params = {'params': {'keyword': this.keyword, 'pageNo': 1}};
-                axios.get(url, params).then(res => {
+                axios.get(url, params).then(res = > {
                     this.results = res.data.data.data;
-                })
+            })
             }
         }
     })

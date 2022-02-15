@@ -1,7 +1,6 @@
 package com.afanty.base.test.system.codetype.rest;
 
 import com.afanty.base.test.system.codetype.rest.entity.InvokeResult;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;

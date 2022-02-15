@@ -17,7 +17,7 @@ import java.util.Map;
  * @Author yejx
  * @Date 2022/1/28
  */
-public class CodeTypeRestTest extends BaseTest{
+public class CodeTypeRestTest extends BaseTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeTypeRestTest.class);
 

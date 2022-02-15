@@ -5,7 +5,6 @@ import com.afanty.base.test.business.items.entity.Items;
 import com.afanty.base.test.business.items.service.ItemsServiceImpl;
 import com.afanty.base.test.common.annotation.NotNull;
 import com.afanty.base.test.common.utils.OkHttpUtil;
-import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.PageResult;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
@@ -49,31 +48,28 @@ public class ItemsRest {
     @Resource(name = "itemsServiceImpl")
     private ItemsServiceImpl itemsService;
 
-    @ApiOperation(value = "条件查询评分项表", notes = "条件查询评分项表", response = ResponseResult.class)
+    @ApiOperation(value = "条件查询评分项表", notes = "条件查询评分项表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
     @RequestMapping(value = "/getlist", method = RequestMethod.GET)
-    public ResponseResult getlist(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
+    public ResponseResult<List<Items>> getlist(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
         LOGGER.info("条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
-        ResponseResult rr = new ResponseResult();
         try {
-            rr.setData(itemsService.baseListQuery(param));
+            return ResponseResult.success(itemsService.baseListQuery(param));
         } catch (Exception e) {
             LOGGER.error("条件查询评分项表错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
-    @ApiOperation(value = "分页查询评分项表", notes = "分页查询评分项表", response = ResponseResult.class)
+    @ApiOperation(value = "分页查询评分项表", notes = "分页查询评分项表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
     @RequestMapping(value = "/getpagelist", method = RequestMethod.GET)
-    public ResponseResult getpagelist(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
+    public ResponseResult<PageResult<Items>> getpagelist(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
         LOGGER.info("条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
-        ResponseResult rr = new ResponseResult();
         Page<Items> page = new Page<>();
         try {
             page.setCurrent(Optional.ofNullable(param.get("page")).map(value -> Integer.valueOf(value.toString().trim())).orElse(1));
@@ -82,36 +78,31 @@ public class ItemsRest {
             param.put("limit", (page.getCurrent() - 1) * page.getSize() + "," + page.getSize());
             page.setTotal(itemsService.baseCountQuery(param));
             page.setRecords(itemsService.baseListQuery(param));
-            rr.setData(new PageResult<>(page));
+            return ResponseResult.success(new PageResult<>(page));
         } catch (Exception e) {
             LOGGER.error("分页查询评分项表错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     @ApiOperation(value = "根据id批量查询", notes = "所有id以逗号分割", response = ResponseResult.class)
     @ApiImplicitParams({@ApiImplicitParam(name = "itemsIds", value = "标签id逗号分割", dataType = "String", paramType = "query")})
     @RequestMapping(value = "/getlistbatchbyids", method = RequestMethod.GET)
-    public ResponseResult getlistbatchbyids(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
+    public ResponseResult<List<Items>> getlistbatchbyids(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
         LOGGER.info("根据id批量查询, 参数：{}", JSONObject.toJSONString(param));
-        ResponseResult rr = new ResponseResult();
         String itemsIds = MapUtils.getString(param, "itemsIds");
         if (StringUtils.isEmpty(itemsIds)) {
-            rr.setStatus(StatusCode.CODE_1000.getKey());
-            rr.setMsg(StatusCode.CODE_1000.getDesc());
-            return rr;
+            return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
         }
         try {
             // 根据多个符号进行分割
             String[] split = itemsIds.split("[,，]");
             List<Items> itemsList = itemsService.listByIds(Arrays.asList(split));
-            rr.setData(itemsList);
+            return ResponseResult.success(itemsList);
         } catch (Exception e) {
             LOGGER.error("根据id批量查询错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     //    @ApiIdempotent(fields = "itemsName", serviceClass = ItemsServiceImpl.class, clazz = Items.class)
@@ -120,55 +111,48 @@ public class ItemsRest {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(Items items) {
         LOGGER.info("新建, 参数：{}", JSONObject.toJSONString(items));
-        ResponseResult rr = new ResponseResult();
         try {
             LocalDateTime currentDateTime = LocalDateTime.now();
             this.setCreateInfo(items, currentDateTime);
             this.setUpdateInfo(items, currentDateTime);
-            itemsService.save(items);
+            boolean successFlag = itemsService.save(items);
+            return ResponseResult.auto(successFlag);
         } catch (Exception e) {
             LOGGER.error("新建错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     @ApiOperation(value = "批量新建", notes = "批量新建", response = ResponseResult.class)
     @RequestMapping(value = "/savebatch", method = RequestMethod.POST)
     public ResponseResult savebatch(@RequestBody List<Items> list) {
         LOGGER.info("批量新建, 参数：{}", JSONObject.toJSONString(list));
-        ResponseResult rr = new ResponseResult();
         if (list == null || list.size() <= 0) {
-            rr.setStatus(StatusCode.CODE_1000.getKey());
-            rr.setMsg(StatusCode.CODE_1000.getDesc());
-            return rr;
+            return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
         }
         try {
-            itemsService.saveBatch(list);
+            boolean successFlag = itemsService.saveBatch(list);
+            return ResponseResult.auto(successFlag);
         } catch (Exception e) {
             LOGGER.error("新建错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     @ApiOperation(value = "修改", notes = "修改", response = ResponseResult.class)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseResult update(Items items) {
         LOGGER.info("修改, 参数：{}", JSONObject.toJSONString(items));
-        ResponseResult rr = new ResponseResult();
         if (items == null || StringUtils.isEmpty(items.getItemsId())) {
-            rr.setStatus(StatusCode.CODE_1000.getKey());
-            rr.setMsg(StatusCode.CODE_1000.getDesc());
-            return rr;
+            return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
         }
         try {
-            itemsService.updateById(items);
+            boolean successFlag = itemsService.updateById(items);
+            return ResponseResult.auto(successFlag);
         } catch (Exception e) {
             LOGGER.error("修改错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     @ApiOperation(value = "根据id批量修改使用状态", notes = "根据id批量修改使用状态", response = ResponseResult.class)
@@ -178,13 +162,10 @@ public class ItemsRest {
     @RequestMapping(value = "/updateusebatchbyid", method = RequestMethod.POST)
     public ResponseResult updateUseBatchById(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
         LOGGER.info("根据id批量修改使用状态, 参数：{}", JSONObject.toJSONString(param));
-        ResponseResult rr = new ResponseResult();
         String itemsIds = MapUtils.getString(param, "itemsIds");
         Integer isUse = MapUtils.getInteger(param, "isUse");
         if (StringUtils.isEmpty(itemsIds) || isUse == null) {
-            rr.setStatus(StatusCode.CODE_1000.getKey());
-            rr.setMsg(StatusCode.CODE_1000.getDesc());
-            return rr;
+            return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
         }
         try {
             // 根据多个符号进行分割
@@ -196,32 +177,28 @@ public class ItemsRest {
                 items.setIsUse(MapUtils.getInteger(param, "isUse"));
                 itemsList.add(items);
             });
-            itemsService.updateBatchById(itemsList);
+            boolean successFlag = itemsService.updateBatchById(itemsList);
+            return ResponseResult.auto(successFlag);
         } catch (Exception e) {
             LOGGER.error("根据id批量修改使用状态错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     @ApiOperation(value = "根据id查询评分项", notes = "根据id查询评分项", response = ResponseResult.class)
     @ApiImplicitParams({@ApiImplicitParam(name = "itemsId", value = "标签id", required = true, dataType = "String", paramType = "path")})
     @RequestMapping(value = "/{itemsId}", method = RequestMethod.GET)
-    public ResponseResult getById(@PathVariable String itemsId) {
+    public ResponseResult<Items> getById(@PathVariable String itemsId) {
         LOGGER.info("根据id查询评分项, 参数：{}", itemsId);
-        ResponseResult rr = new ResponseResult();
         if (StringUtils.isEmpty(itemsId)) {
-            rr.setStatus(StatusCode.CODE_1000.getKey());
-            rr.setMsg(StatusCode.CODE_1000.getDesc());
-            return rr;
+            return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
         }
         try {
-            rr.setData(itemsService.getById(itemsId));
+            return ResponseResult.success(itemsService.getById(itemsId));
         } catch (Exception e) {
             LOGGER.error("根据id查询评分项错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     @ApiOperation(value = "根据id删除评分项", notes = "根据id删除评分项", response = ResponseResult.class)
@@ -229,19 +206,16 @@ public class ItemsRest {
     @RequestMapping(value = "/{itemsId}", method = RequestMethod.DELETE)
     public ResponseResult getlist(@PathVariable String itemsId) {
         LOGGER.info("根据id删除评分项, 参数：{}", itemsId);
-        ResponseResult rr = new ResponseResult();
         if (StringUtils.isEmpty(itemsId)) {
-            rr.setStatus(StatusCode.CODE_1000.getKey());
-            rr.setMsg(StatusCode.CODE_1000.getDesc());
-            return rr;
+            return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
         }
         try {
-            itemsService.removeById(itemsId);
+            boolean successFlag = itemsService.removeById(itemsId);
+            return ResponseResult.auto(successFlag);
         } catch (Exception e) {
             LOGGER.error("根据id删除评分项错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     @ApiOperation(value = "远程条件查询评分项表", notes = "远程条件查询评分项表", response = ResponseResult.class)
@@ -249,9 +223,8 @@ public class ItemsRest {
             @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
     @RequestMapping(value = "/remotegetlist", method = RequestMethod.GET)
-    public ResponseResult remoteGetList(@RequestParam @ApiParam(hidden = true) Map<String, String> param) {
+    public ResponseResult<List<Items>> remoteGetList(@RequestParam @ApiParam(hidden = true) Map<String, String> param) {
         LOGGER.info("远程条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
-        ResponseResult rr = new ResponseResult();
         try {
             String url = "http://127.0.0.1:9090/mp/ac/system/items/getlist";
             LOGGER.info("远程条件查询评分项表, url：{}", url);
@@ -261,12 +234,11 @@ public class ItemsRest {
             List<Items> itemsList = Optional.ofNullable(responseObject)
                     .map(response -> JSONObject.parseArray(response.getString("data"), Items.class))
                     .orElseGet(ArrayList::new);
-            rr.setData(itemsList);
+            return ResponseResult.success(itemsList);
         } catch (Exception e) {
             LOGGER.error("远程条件查询评分项表异常：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -274,14 +246,11 @@ public class ItemsRest {
     @RequestMapping(value = "/remoteupdate", method = RequestMethod.POST)
     public ResponseResult remoteUpdate(Items items) {
         LOGGER.info("本地和远程修改标签，参数：{}", JSONObject.toJSONString(items));
-        ResponseResult rr = new ResponseResult();
         if (items == null || StringUtils.isEmpty(items.getItemsId())) {
-            rr.setStatus(StatusCode.CODE_1000.getKey());
-            rr.setMsg(StatusCode.CODE_1000.getDesc());
-            return rr;
+            return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
         }
         try {
-            itemsService.updateById(items);
+            boolean successFlag = itemsService.updateById(items);
             int i = 1 / 0;
 
             Map<String, String> param = new HashMap<>();
@@ -293,11 +262,12 @@ public class ItemsRest {
             String result = OkHttpUtil.post(url, param, null);
             JSONObject responseObject = JSONObject.parseObject(result);
             LOGGER.info("远程修改标签, 结果：{}", JSONObject.toJSONString(responseObject));
+
+            return ResponseResult.auto(successFlag);
         } catch (Exception e) {
             LOGGER.error("本地和远程修改标签异常：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        return rr;
     }
 
     /*-------------------------------------------------- 公共处理方法 --------------------------------------------------*/

@@ -1,7 +1,6 @@
 package com.afanty.base.test.business.es.rest;
 
 import com.afanty.base.test.business.es.service.GoodsServiceImpl;
-import com.afanty.base.test.common.web.MsgCode;
 import com.afanty.base.test.common.web.PageResult;
 import com.afanty.base.test.common.web.ResponseResult;
 import com.afanty.base.test.common.web.StatusCode;
@@ -30,7 +29,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/goods")
-@Api(tags = "商品表接口", value = "goods",description = "商品表接口")
+@Api(tags = "商品表接口", value = "goods", description = "商品表接口")
 @ApiResponses(value = {
         @ApiResponse(code = 200, message = "请求已完成"),
         @ApiResponse(code = 201, message = "资源成功被创建"),
@@ -50,25 +49,19 @@ public class GoodsRest {
     @GetMapping("/parse/{keyword}")
     public ResponseResult parse(@PathVariable("keyword") String keyword) {
         LOGGER.info("解析网页并存储数据至es, 参数：{}", keyword);
-        ResponseResult rr = new ResponseResult();
         try {
-            Boolean result = goodsService.parseGoods(keyword);
-            if (!result) {
-                rr = new ResponseResult(result, StatusCode.CODE_3000.getKey(), "网页解析并持久化失败");
-            }
+            Boolean successFlag = goodsService.parseGoods(keyword);
+            return ResponseResult.auto(successFlag);
         } catch (Exception e) {
             LOGGER.error("解析网页并存储数据至es错误：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        LOGGER.info("请求结果：{}", JSONObject.toJSONString(rr));
-        return rr;
     }
 
     @ApiOperation(value = "es分页查询", notes = "es分页查询", response = ResponseResult.class)
     @GetMapping("/getpagelist")
     public ResponseResult getPageList(@RequestParam Map<String, Object> param) {
         LOGGER.info("ES分页查询, 参数：{}", JSONObject.toJSONString(param));
-        ResponseResult rr = new ResponseResult();
         Page<Map<String, Object>> page = new Page<>();
         try {
             Integer pageNo = Optional.ofNullable(param.get("pageNo")).map(p -> Integer.valueOf(p.toString())).orElse(1);
@@ -78,13 +71,11 @@ public class GoodsRest {
             page.setSize(pageSize);
             page.setTotal(pageList.size());
             page.setRecords(pageList);
-            rr.setData(new PageResult<>(page));
+            return ResponseResult.success(new PageResult<>(page));
         } catch (Exception e) {
             LOGGER.error("ES分页查询出错：{}", e.getMessage());
-            rr = new ResponseResult(MsgCode.FAILURE.getKey(), StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc(), null);
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-        LOGGER.info("请求结果：{}", JSONObject.toJSONString(rr));
-        return rr;
     }
 
 }
