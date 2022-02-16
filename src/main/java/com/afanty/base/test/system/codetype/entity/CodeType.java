@@ -1,7 +1,7 @@
 package com.afanty.base.test.system.codetype.entity;
 
+import com.afanty.base.test.common.web.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -24,9 +23,9 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @TableName("tbl_sys_code_type")
 @ApiModel(value = "CodeType对象", description = "字典类型")
-public class CodeType extends Model<CodeType> {
+public class CodeType extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5696227868393529662L;
 
     @ApiModelProperty("id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -60,35 +59,5 @@ public class CodeType extends Model<CodeType> {
     @ApiModelProperty("是否启用：1-是（默认），0-否")
     @TableField("enable_flag")
     private Integer enableFlag;
-
-    @ApiModelProperty("创建人账号")
-    @TableField("create_user")
-    private String createUser;
-
-    @ApiModelProperty("创建人姓名")
-    @TableField("create_name")
-    private String createName;
-
-    @ApiModelProperty("创建时间")
-    @TableField("create_time")
-    private LocalDateTime createTime;
-
-    @ApiModelProperty("修改人账号")
-    @TableField("update_user")
-    private String updateUser;
-
-    @ApiModelProperty("修改人姓名")
-    @TableField("update_name")
-    private String updateName;
-
-    @ApiModelProperty("修改时间")
-    @TableField("update_time")
-    private LocalDateTime updateTime;
-
-
-    @Override
-    public Serializable pkVal() {
-        return this.id;
-    }
 
 }

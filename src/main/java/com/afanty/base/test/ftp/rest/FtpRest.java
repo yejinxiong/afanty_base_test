@@ -1,7 +1,7 @@
 package com.afanty.base.test.ftp.rest;
 
-import com.afanty.base.test.common.web.ResponseResult;
-import com.afanty.base.test.common.web.StatusCode;
+import com.afanty.base.test.common.web.domain.ResponseResult;
+import com.afanty.base.test.common.web.domain.StatusCode;
 import com.afanty.base.test.ftp.entity.Contact;
 import com.afanty.base.test.ftp.entity.ContactDir;
 import com.afanty.base.test.ftp.service.FtpServiceImpl;

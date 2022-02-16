@@ -1,9 +1,9 @@
 package com.afanty.base.test.business.es.rest;
 
 import com.afanty.base.test.business.es.service.GoodsServiceImpl;
-import com.afanty.base.test.common.web.PageResult;
-import com.afanty.base.test.common.web.ResponseResult;
-import com.afanty.base.test.common.web.StatusCode;
+import com.afanty.base.test.common.web.domain.PageResult;
+import com.afanty.base.test.common.web.domain.ResponseResult;
+import com.afanty.base.test.common.web.domain.StatusCode;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;

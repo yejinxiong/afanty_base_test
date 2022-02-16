@@ -1,7 +1,7 @@
 package com.afanty.base.test.system.codetype.rest;
 
 import com.afanty.base.test.common.BaseTest;
-import com.afanty.base.test.common.web.ResponseResult;
+import com.afanty.base.test.common.web.domain.ResponseResult;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

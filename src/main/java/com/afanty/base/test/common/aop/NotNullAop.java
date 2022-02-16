@@ -1,9 +1,9 @@
 package com.afanty.base.test.common.aop;
 
 import com.afanty.base.test.common.annotation.NotNull;
-import com.afanty.base.test.common.web.MsgCode;
-import com.afanty.base.test.common.web.ResponseResult;
-import com.afanty.base.test.common.web.StatusCode;
+import com.afanty.base.test.common.web.domain.MsgCode;
+import com.afanty.base.test.common.web.domain.ResponseResult;
+import com.afanty.base.test.common.web.domain.StatusCode;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
 import io.swagger.annotations.ApiModelProperty;

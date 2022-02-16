@@ -2,22 +2,18 @@ package com.afanty.base.test.system.dict.rest;
 
 
 import com.afanty.base.test.common.annotation.NotNull;
-import com.afanty.base.test.common.web.ResponseResult;
-import com.afanty.base.test.common.web.StatusCode;
+import com.afanty.base.test.common.web.domain.ResponseResult;
+import com.afanty.base.test.common.web.domain.StatusCode;
 import com.afanty.base.test.system.codetype.service.CodeTypeServiceImp;
 import com.afanty.base.test.system.dict.entity.Dict;
 import com.afanty.base.test.system.dict.service.DictServiceImp;
 import com.alibaba.fastjson.JSONObject;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +27,16 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/dict")
+@Api(tags = "字典接口", value = "Dict")
+@ApiResponses(value = {
+        @ApiResponse(code = 200, message = "请求已完成"),
+        @ApiResponse(code = 201, message = "资源成功被创建"),
+        @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+        @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+        @ApiResponse(code = 403, message = "服务器接受请求，但是拒绝处理"),
+        @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+        @ApiResponse(code = 500, message = "服务器出现异常")
+})
 public class DictRest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DictRest.class);
@@ -41,7 +47,7 @@ public class DictRest {
     @Resource(name = "codeTypeServiceImp")
     private CodeTypeServiceImp codeTypeService;
 
-    @ApiOperation(value = "条件查询字典表", notes = "条件查询字典表", response = ResponseResult.class)
+    @ApiOperation(value = "条件查询字典表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "typeCode", value = "类型编码", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "dictName", value = "字典名称", dataType = "String", paramType = "query"),
@@ -59,7 +65,7 @@ public class DictRest {
 
     //    @ApiIdempotent(fields = "typeCode,dictValue", serviceClass = DictServiceImp.class, clazz = Dict.class, errMsg = "该字典值已存在")
     @NotNull(fields = "typeCode,dictName,dictValue", entityClass = Dict.class)
-    @ApiOperation(value = "新增字典", notes = "新增字典", response = ResponseResult.class)
+    @ApiOperation(value = "新增字典")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(Dict dict) {
         String paramJson = JSONObject.toJSONString(dict);
@@ -71,39 +77,12 @@ public class DictRest {
             return rr;
         }
         try {
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            this.setCreateInfo(dict, currentDateTime);
-            this.setUpdateInfo(dict, currentDateTime);
             boolean successFlag = dictService.save(dict);
             return ResponseResult.auto(successFlag, dict);
         } catch (Exception e) {
             LOGGER.error("新增字典异常：{}", e.getMessage());
             return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-    }
-
-    /*-------------------------------------------------- 公共处理方法 --------------------------------------------------*/
-
-    /**
-     * 设置创建信息
-     *
-     * @param dict
-     */
-    private void setCreateInfo(Dict dict, LocalDateTime currentDateTime) {
-        dict.setCreateUser("yejx");
-        dict.setCreateName("叶金雄");
-        dict.setCreateTime(currentDateTime);
-    }
-
-    /**
-     * 设置修改信息
-     *
-     * @param dict
-     */
-    private void setUpdateInfo(Dict dict, LocalDateTime currentDateTime) {
-        dict.setUpdateUser("yejx");
-        dict.setUpdateName("叶金雄");
-        dict.setUpdateTime(currentDateTime);
     }
 
 }

@@ -1,9 +1,7 @@
 package com.afanty.base.test.business.items.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.afanty.base.test.common.web.base.BaseEntity;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,7 +9,6 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -25,7 +22,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @TableName("tbl_qm_items")
 @ApiModel(value = "Items对象", description = "评分项表存的个省自定义的评分项数据，	读写，	数据量：< 10000条")
-public class Items implements Serializable {
+public class Items extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -5515115932965300160L;
 
@@ -95,12 +92,16 @@ public class Items implements Serializable {
      * 租户ID
      */
     @ApiModelProperty(value = "租户ID")
+    // 结合EntityInterceptor使用，自动为该字段填充值
+    @TableField(value = "tenant_id", fill = FieldFill.INSERT)
     private String tenantId;
 
     /**
      * 省份ID
      */
     @ApiModelProperty(value = "省份ID")
+    // 结合EntityInterceptor使用，自动为该字段填充值
+    @TableField(value = "pro_id", fill = FieldFill.INSERT)
     private String proId;
 
     /**
@@ -108,49 +109,5 @@ public class Items implements Serializable {
      */
     @ApiModelProperty(value = "部门ID")
     private String orgId;
-
-    /**
-     * 创建人账号
-     */
-    @ApiModelProperty(value = "创建人账号")
-    private String createUser;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
-
-    /**
-     * 创建时间
-     * 如果有LocalDateFormatConfig，则不用加@JsonFormat和@DateTimeFormat
-     */
-    @ApiModelProperty(value = "创建时间")
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8") // 返回格式
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // 入库格式
-//    private Date createTime;
-    private LocalDateTime createTime;
-
-    /**
-     * 修改人账号
-     */
-    @ApiModelProperty(value = "修改人账号")
-    private String updateUser;
-
-    /**
-     * 修改人姓名
-     */
-    @ApiModelProperty(value = "修改人姓名")
-    private String updateName;
-
-    /**
-     * 修改时间
-     * 如果有LocalDateFormatConfig，则不用加@JsonFormat和@DateTimeFormat
-     */
-    @ApiModelProperty(value = "修改时间")
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8") // 返回格式
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // 入库格式
-//    private Date updateTime;
-    private LocalDateTime updateTime;
 
 }

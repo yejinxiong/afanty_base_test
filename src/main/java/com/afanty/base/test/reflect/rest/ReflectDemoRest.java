@@ -3,7 +3,7 @@ package com.afanty.base.test.reflect.rest;
 import com.afanty.base.test.business.items.entity.Items;
 import com.afanty.base.test.business.items.service.ItemsServiceImpl;
 import com.afanty.base.test.common.utils.SpringUtil;
-import com.afanty.base.test.common.web.ResponseResult;
+import com.afanty.base.test.common.web.domain.ResponseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;

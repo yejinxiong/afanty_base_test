@@ -1,14 +1,13 @@
 package com.afanty.base.test.system.dict.entity;
 
+import com.afanty.base.test.common.web.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -22,9 +21,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @TableName("tbl_sys_dict")
 @ApiModel(value = "Dict对象", description = "字典表")
-public class Dict extends Model<Dict> {
+public class Dict extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7894932629625104028L;
 
     @ApiModelProperty("id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -66,35 +65,5 @@ public class Dict extends Model<Dict> {
     @ApiModelProperty("是否启用：1-是（默认），0-否")
     @TableField("enable_flag")
     private Integer enableFlag;
-
-    @ApiModelProperty("创建人账号")
-    @TableField("create_user")
-    private String createUser;
-
-    @ApiModelProperty("创建人姓名")
-    @TableField("create_name")
-    private String createName;
-
-    @ApiModelProperty("创建时间")
-    @TableField("create_time")
-    private LocalDateTime createTime;
-
-    @ApiModelProperty("修改人账号")
-    @TableField("update_user")
-    private String updateUser;
-
-    @ApiModelProperty("修改人姓名")
-    @TableField("update_name")
-    private String updateName;
-
-    @ApiModelProperty("修改时间")
-    @TableField("update_time")
-    private LocalDateTime updateTime;
-
-
-    @Override
-    public Serializable pkVal() {
-        return this.id;
-    }
 
 }

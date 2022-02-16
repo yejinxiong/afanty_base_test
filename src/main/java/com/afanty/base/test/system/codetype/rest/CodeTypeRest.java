@@ -2,21 +2,17 @@ package com.afanty.base.test.system.codetype.rest;
 
 
 import com.afanty.base.test.common.annotation.NotNull;
-import com.afanty.base.test.common.web.ResponseResult;
-import com.afanty.base.test.common.web.StatusCode;
+import com.afanty.base.test.common.web.domain.ResponseResult;
+import com.afanty.base.test.common.web.domain.StatusCode;
 import com.afanty.base.test.system.codetype.entity.CodeType;
 import com.afanty.base.test.system.codetype.service.CodeTypeServiceImp;
 import com.alibaba.fastjson.JSONObject;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +27,16 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/codetype")
+@Api(tags = "字典类型接口", value = "CodeType")
+@ApiResponses(value = {
+        @ApiResponse(code = 200, message = "请求已完成"),
+        @ApiResponse(code = 201, message = "资源成功被创建"),
+        @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+        @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+        @ApiResponse(code = 403, message = "服务器接受请求，但是拒绝处理"),
+        @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+        @ApiResponse(code = 500, message = "服务器出现异常")
+})
 public class CodeTypeRest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeTypeRest.class);
@@ -38,7 +44,7 @@ public class CodeTypeRest {
     @Resource(name = "codeTypeServiceImp")
     private CodeTypeServiceImp codeTypeService;
 
-    @ApiOperation(value = "条件查询字典类型表", notes = "条件查询字典类型表", response = ResponseResult.class)
+    @ApiOperation(value = "条件查询字典类型表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "typeCode", value = "类型编码", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "typeName", value = "类型名称", dataType = "String", paramType = "query")})
@@ -55,7 +61,7 @@ public class CodeTypeRest {
 
     //    @ApiIdempotent(fields = "typeCode", serviceClass = CodeTypeServiceImp.class, clazz = CodeType.class, errMsg = "编码已存在")
     @NotNull(fields = "typeCode,typeName,dictOrTree,enableFlag", entityClass = CodeType.class)
-    @ApiOperation(value = "新增字典类型", notes = "新增字典类型", response = ResponseResult.class)
+    @ApiOperation(value = "新增字典类型")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(CodeType codeType) {
         String paramJson = JSONObject.toJSONString(codeType);
@@ -72,9 +78,6 @@ public class CodeTypeRest {
                     LOGGER.info("[{}] 该类型编码已存在", typeCode);
                     return ResponseResult.error(StatusCode.CODE_1000.getKey(), "该类型编码已存在");
                 } else {
-                    LocalDateTime currentDateTime = LocalDateTime.now();
-                    this.setCreateInfo(codeType, currentDateTime);
-                    this.setUpdateInfo(codeType, currentDateTime);
                     boolean successFlag = codeTypeService.save(codeType);
                     LOGGER.info("[{}] {}", typeCode, "操作完成");
                     return ResponseResult.auto(successFlag);
@@ -84,30 +87,6 @@ public class CodeTypeRest {
             LOGGER.error("新增字典类型异常：{}", e.getMessage());
             return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-    }
-
-    /*-------------------------------------------------- 公共处理方法 --------------------------------------------------*/
-
-    /**
-     * 设置创建信息
-     *
-     * @param codeType
-     */
-    private void setCreateInfo(CodeType codeType, LocalDateTime currentDateTime) {
-        codeType.setCreateUser("yejx");
-        codeType.setCreateName("叶金雄");
-        codeType.setCreateTime(currentDateTime);
-    }
-
-    /**
-     * 设置修改信息
-     *
-     * @param codeType
-     */
-    private void setUpdateInfo(CodeType codeType, LocalDateTime currentDateTime) {
-        codeType.setUpdateUser("yejx");
-        codeType.setUpdateName("叶金雄");
-        codeType.setUpdateTime(currentDateTime);
     }
 
 }

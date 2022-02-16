@@ -1,4 +1,4 @@
-package com.afanty.base.test.common.web;
+package com.afanty.base.test.common.web.domain;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;

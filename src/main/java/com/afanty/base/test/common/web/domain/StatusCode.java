@@ -1,4 +1,4 @@
-package com.afanty.base.test.common.web;
+package com.afanty.base.test.common.web.domain;
 
 /**
  * <p>

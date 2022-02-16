@@ -5,9 +5,9 @@ import com.afanty.base.test.business.items.entity.Items;
 import com.afanty.base.test.business.items.service.ItemsServiceImpl;
 import com.afanty.base.test.common.annotation.NotNull;
 import com.afanty.base.test.common.utils.OkHttpUtil;
-import com.afanty.base.test.common.web.PageResult;
-import com.afanty.base.test.common.web.ResponseResult;
-import com.afanty.base.test.common.web.StatusCode;
+import com.afanty.base.test.common.web.domain.PageResult;
+import com.afanty.base.test.common.web.domain.ResponseResult;
+import com.afanty.base.test.common.web.domain.StatusCode;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.*;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -48,7 +47,7 @@ public class ItemsRest {
     @Resource(name = "itemsServiceImpl")
     private ItemsServiceImpl itemsService;
 
-    @ApiOperation(value = "条件查询评分项表", notes = "条件查询评分项表")
+    @ApiOperation(value = "条件查询评分项表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
@@ -63,7 +62,7 @@ public class ItemsRest {
         }
     }
 
-    @ApiOperation(value = "分页查询评分项表", notes = "分页查询评分项表")
+    @ApiOperation(value = "分页查询评分项表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
@@ -85,7 +84,7 @@ public class ItemsRest {
         }
     }
 
-    @ApiOperation(value = "根据id批量查询", notes = "所有id以逗号分割", response = ResponseResult.class)
+    @ApiOperation(value = "根据id批量查询")
     @ApiImplicitParams({@ApiImplicitParam(name = "itemsIds", value = "标签id逗号分割", dataType = "String", paramType = "query")})
     @RequestMapping(value = "/getlistbatchbyids", method = RequestMethod.GET)
     public ResponseResult<List<Items>> getlistbatchbyids(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
@@ -107,14 +106,11 @@ public class ItemsRest {
 
     //    @ApiIdempotent(fields = "itemsName", serviceClass = ItemsServiceImpl.class, clazz = Items.class)
     @NotNull(fields = "itemsName", entityClass = Items.class)
-    @ApiOperation(value = "新建", notes = "新建", response = ResponseResult.class)
+    @ApiOperation(value = "新建")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseResult save(Items items) {
         LOGGER.info("新建, 参数：{}", JSONObject.toJSONString(items));
         try {
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            this.setCreateInfo(items, currentDateTime);
-            this.setUpdateInfo(items, currentDateTime);
             boolean successFlag = itemsService.save(items);
             return ResponseResult.auto(successFlag);
         } catch (Exception e) {
@@ -123,7 +119,7 @@ public class ItemsRest {
         }
     }
 
-    @ApiOperation(value = "批量新建", notes = "批量新建", response = ResponseResult.class)
+    @ApiOperation(value = "批量新建")
     @RequestMapping(value = "/savebatch", method = RequestMethod.POST)
     public ResponseResult savebatch(@RequestBody List<Items> list) {
         LOGGER.info("批量新建, 参数：{}", JSONObject.toJSONString(list));
@@ -139,7 +135,7 @@ public class ItemsRest {
         }
     }
 
-    @ApiOperation(value = "修改", notes = "修改", response = ResponseResult.class)
+    @ApiOperation(value = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseResult update(Items items) {
         LOGGER.info("修改, 参数：{}", JSONObject.toJSONString(items));
@@ -155,7 +151,7 @@ public class ItemsRest {
         }
     }
 
-    @ApiOperation(value = "根据id批量修改使用状态", notes = "根据id批量修改使用状态", response = ResponseResult.class)
+    @ApiOperation(value = "根据id批量修改使用状态")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemsIds", value = "标签id", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "isUse", value = "使用状态", dataType = "Integer", paramType = "query")})
@@ -185,7 +181,7 @@ public class ItemsRest {
         }
     }
 
-    @ApiOperation(value = "根据id查询评分项", notes = "根据id查询评分项", response = ResponseResult.class)
+    @ApiOperation(value = "根据id查询评分项")
     @ApiImplicitParams({@ApiImplicitParam(name = "itemsId", value = "标签id", required = true, dataType = "String", paramType = "path")})
     @RequestMapping(value = "/{itemsId}", method = RequestMethod.GET)
     public ResponseResult<Items> getById(@PathVariable String itemsId) {
@@ -201,7 +197,7 @@ public class ItemsRest {
         }
     }
 
-    @ApiOperation(value = "根据id删除评分项", notes = "根据id删除评分项", response = ResponseResult.class)
+    @ApiOperation(value = "根据id删除评分项")
     @ApiImplicitParams({@ApiImplicitParam(name = "itemsId", value = "标签id", required = true, dataType = "String", paramType = "path")})
     @RequestMapping(value = "/{itemsId}", method = RequestMethod.DELETE)
     public ResponseResult getlist(@PathVariable String itemsId) {
@@ -218,7 +214,7 @@ public class ItemsRest {
         }
     }
 
-    @ApiOperation(value = "远程条件查询评分项表", notes = "远程条件查询评分项表", response = ResponseResult.class)
+    @ApiOperation(value = "远程条件查询评分项表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
@@ -242,7 +238,7 @@ public class ItemsRest {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    @ApiOperation(value = "本地和远程修改标签", notes = "本地和远程修改标签", response = ResponseResult.class)
+    @ApiOperation(value = "本地和远程修改标签")
     @RequestMapping(value = "/remoteupdate", method = RequestMethod.POST)
     public ResponseResult remoteUpdate(Items items) {
         LOGGER.info("本地和远程修改标签，参数：{}", JSONObject.toJSONString(items));
@@ -268,35 +264,5 @@ public class ItemsRest {
             LOGGER.error("本地和远程修改标签异常：{}", e.getMessage());
             return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
-    }
-
-    /*-------------------------------------------------- 公共处理方法 --------------------------------------------------*/
-
-    /**
-     * 设置创建信息
-     *
-     * @param items
-     */
-    private void setCreateInfo(Items items, LocalDateTime currentDateTime) {
-        items.setTenantId("AFANTY");
-        items.setProId("xlm");
-        items.setOrgId("development");
-        items.setCreateUser("yejx");
-        items.setCreateName("叶金雄");
-        items.setCreateTime(currentDateTime);
-    }
-
-    /**
-     * 设置修改信息
-     *
-     * @param items
-     */
-    private void setUpdateInfo(Items items, LocalDateTime currentDateTime) {
-        items.setTenantId("AFANTY");
-        items.setProId("xlm");
-        items.setOrgId("development");
-        items.setUpdateUser("yejx");
-        items.setUpdateName("叶金雄");
-        items.setUpdateTime(currentDateTime);
     }
 }
