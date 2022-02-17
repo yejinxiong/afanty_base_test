@@ -46,8 +46,9 @@ public class CodeTypeRest {
 
     @ApiOperation(value = "条件查询字典类型表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "typeCode", value = "类型编码", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "typeName", value = "类型名称", dataType = "String", paramType = "query")})
+            @ApiImplicitParam(name = "typeCode", value = "类型编码", paramType = "query"),
+            @ApiImplicitParam(name = "typeName", value = "类型名称", paramType = "query")
+    })
     @GetMapping(value = "/querylist")
     public ResponseResult<List<CodeType>> queryList(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
         LOGGER.info("条件查询字典类型表, 参数：{}", JSONObject.toJSONString(param));

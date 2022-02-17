@@ -31,8 +31,9 @@
         <freemarker.version>2.3.31</freemarker.version>
         <poi.version>4.1.0</poi.version>
         <knife4j.version>3.0.3</knife4j.version>
-        <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
+        <!--<springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <swagger-models.version>1.5.22</swagger-models.version>-->
         <jsch.version>0.1.29</jsch.version>
         <elasticsearch-rest-high-level-client.version>7.10.2</elasticsearch-rest-high-level-client.version>
         <jsoup.version>1.11.3</jsoup.version>
@@ -154,6 +155,19 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${springfox-swagger2.version}</version>
+            &lt;!&ndash; 解决Swagger异常：AbstractSerializableParameter : Illegal DefaultValue null for parameter type integer：For input string: "" &ndash;&gt;
+            <exclusions>
+                <exclusion>
+                    <groupId>io.swagger</groupId>
+                    <artifactId>swagger-models</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        &lt;!&ndash; 解决Swagger异常：AbstractSerializableParameter : Illegal DefaultValue null for parameter type integer：For input string: "" &ndash;&gt;
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-models</artifactId>
+            <version>${swagger-models.version}</version>
         </dependency>-->
 
         <!-- 接口文档ui增强版 -->

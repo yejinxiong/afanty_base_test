@@ -10,6 +10,7 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * <p>
@@ -17,11 +18,30 @@ import springfox.documentation.spring.web.plugins.Docket;
  * Swagger2访问地址：http://127.0.0.1:9000/afanty/base/test/swagger-ui.html
  * knife4j访问地址：http://127.0.0.1:9000/afanty/base/test/doc.html
  * </p>
+ * |-- @ApiImplicitParam
+ *     |-- paramType：代表参数应该放在请求的什么地方（配合allowMultiple = true使用，可以传递数组）
+ *         |-- header   放在请求头。请求参数的获取：@RequestHeader(代码中接收注解)
+ *         |-- query    用于get请求的参数拼接。请求参数的获取：@RequestParam(代码中接收注解)
+ *         |-- path    （用于restful接口）-->请求参数的获取：@PathVariable(代码中接收注解)
+ *         |-- body     放在请求体。请求参数的获取：@RequestBody(代码中接收注解)，可用于接收数组
+ *         |-- form    （不常用）
+ *     |-- dataType： 代表请求参数类型
+ *         |-- string
+ *         |-- int
+ *         |-- long
+ *         |-- Map
+ *         |-- User
+ *     |--allowMultiple：表示是否为数组格式
+ *         |-- false    否（默认）
+ *         |-- true    是
+ *
  *
  * @author yejx
  * @date 2020/5/5
  */
 @Configuration
+@EnableSwagger2
+//@EnableKnife4j
 public class SwaggerConfig {
 
     private static final String VERSION = "1.0.0";

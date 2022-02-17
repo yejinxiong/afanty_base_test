@@ -49,9 +49,10 @@ public class DictRest {
 
     @ApiOperation(value = "条件查询字典表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "typeCode", value = "类型编码", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "dictName", value = "字典名称", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "dictValue", value = "字典值", dataType = "String", paramType = "query")})
+            @ApiImplicitParam(name = "typeCode", value = "类型编码", paramType = "query"),
+            @ApiImplicitParam(name = "dictName", value = "字典名称", paramType = "query"),
+            @ApiImplicitParam(name = "dictValue", value = "字典值", paramType = "query")
+    })
     @GetMapping(value = "/querylist")
     public ResponseResult<List<Dict>> queryList(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
         LOGGER.info("条件查询字典表, 参数：{}", JSONObject.toJSONString(param));

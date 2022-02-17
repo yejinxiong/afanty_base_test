@@ -11,7 +11,6 @@ import com.afanty.base.test.common.web.domain.StatusCode;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.*;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,8 +48,9 @@ public class ItemsRest {
 
     @ApiOperation(value = "条件查询评分项表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
+            @ApiImplicitParam(name = "itemsName", value = "标签名称", paramType = "query"),
+            @ApiImplicitParam(name = "itemsType", value = "标签类型", paramType = "query", dataTypeClass = Integer.class)
+    })
     @RequestMapping(value = "/getlist", method = RequestMethod.GET)
     public ResponseResult<List<Items>> getlist(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
         LOGGER.info("条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
@@ -64,8 +64,9 @@ public class ItemsRest {
 
     @ApiOperation(value = "分页查询评分项表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
+            @ApiImplicitParam(name = "itemsName", value = "标签名称", paramType = "query"),
+            @ApiImplicitParam(name = "itemsType", value = "标签类型", paramType = "query", dataTypeClass = Integer.class)
+    })
     @RequestMapping(value = "/getpagelist", method = RequestMethod.GET)
     public ResponseResult<PageResult<Items>> getpagelist(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
         LOGGER.info("条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
@@ -85,18 +86,15 @@ public class ItemsRest {
     }
 
     @ApiOperation(value = "根据id批量查询")
-    @ApiImplicitParams({@ApiImplicitParam(name = "itemsIds", value = "标签id逗号分割", dataType = "String", paramType = "query")})
+    @ApiImplicitParam(name = "itemsIds", value = "标签ids", paramType = "query", allowMultiple = true, required = true)
     @RequestMapping(value = "/getlistbatchbyids", method = RequestMethod.GET)
-    public ResponseResult<List<Items>> getlistbatchbyids(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
-        LOGGER.info("根据id批量查询, 参数：{}", JSONObject.toJSONString(param));
-        String itemsIds = MapUtils.getString(param, "itemsIds");
-        if (StringUtils.isEmpty(itemsIds)) {
+    public ResponseResult<List<Items>> getlistbatchbyids(@RequestParam String[] itemsIds) {
+        LOGGER.info("根据id批量查询, 参数：{}", JSONObject.toJSONString(itemsIds));
+        if (Objects.isNull(itemsIds) || itemsIds.length <= 0) {
             return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
         }
         try {
-            // 根据多个符号进行分割
-            String[] split = itemsIds.split("[,，]");
-            List<Items> itemsList = itemsService.listByIds(Arrays.asList(split));
+            List<Items> itemsList = itemsService.listByIds(Arrays.asList(itemsIds));
             return ResponseResult.success(itemsList);
         } catch (Exception e) {
             LOGGER.error("根据id批量查询错误：{}", e.getMessage());
@@ -121,7 +119,7 @@ public class ItemsRest {
 
     @ApiOperation(value = "批量新建")
     @RequestMapping(value = "/savebatch", method = RequestMethod.POST)
-    public ResponseResult savebatch(@RequestBody List<Items> list) {
+    public ResponseResult savebatch(@RequestBody @ApiParam(hidden = true) List<Items> list) {
         LOGGER.info("批量新建, 参数：{}", JSONObject.toJSONString(list));
         if (list == null || list.size() <= 0) {
             return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
@@ -153,24 +151,20 @@ public class ItemsRest {
 
     @ApiOperation(value = "根据id批量修改使用状态")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "itemsIds", value = "标签id", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "isUse", value = "使用状态", dataType = "Integer", paramType = "query")})
+            @ApiImplicitParam(name = "itemsIds", value = "标签id", paramType = "query", dataType = "string", allowMultiple = true, required = true),
+            @ApiImplicitParam(name = "isUse", value = "使用状态", paramType = "query", dataType = "int", required = true)
+    })
     @RequestMapping(value = "/updateusebatchbyid", method = RequestMethod.POST)
-    public ResponseResult updateUseBatchById(@RequestParam @ApiParam(hidden = true) Map<String, Object> param) {
-        LOGGER.info("根据id批量修改使用状态, 参数：{}", JSONObject.toJSONString(param));
-        String itemsIds = MapUtils.getString(param, "itemsIds");
-        Integer isUse = MapUtils.getInteger(param, "isUse");
-        if (StringUtils.isEmpty(itemsIds) || isUse == null) {
+    public ResponseResult updateUseBatchById(@RequestParam String[] itemsIds, @RequestParam Integer isUse) {
+        if (Objects.isNull(itemsIds) || itemsIds.length <= 0 || isUse == null) {
             return ResponseResult.error(StatusCode.CODE_1000.getKey(), StatusCode.CODE_1000.getDesc());
         }
         try {
-            // 根据多个符号进行分割
-            String[] split = itemsIds.split("[,，]");
             List<Items> itemsList = new ArrayList<>();
-            Arrays.asList(split).forEach(id -> {
+            Arrays.asList(itemsIds).forEach(id -> {
                 Items items = new Items();
                 items.setItemsId(id);
-                items.setIsUse(MapUtils.getInteger(param, "isUse"));
+                items.setIsUse(isUse);
                 itemsList.add(items);
             });
             boolean successFlag = itemsService.updateBatchById(itemsList);
@@ -182,7 +176,7 @@ public class ItemsRest {
     }
 
     @ApiOperation(value = "根据id查询评分项")
-    @ApiImplicitParams({@ApiImplicitParam(name = "itemsId", value = "标签id", required = true, dataType = "String", paramType = "path")})
+    @ApiImplicitParam(name = "itemsId", value = "标签id", required = true, paramType = "path")
     @RequestMapping(value = "/{itemsId}", method = RequestMethod.GET)
     public ResponseResult<Items> getById(@PathVariable String itemsId) {
         LOGGER.info("根据id查询评分项, 参数：{}", itemsId);
@@ -198,7 +192,7 @@ public class ItemsRest {
     }
 
     @ApiOperation(value = "根据id删除评分项")
-    @ApiImplicitParams({@ApiImplicitParam(name = "itemsId", value = "标签id", required = true, dataType = "String", paramType = "path")})
+    @ApiImplicitParam(name = "itemsId", value = "标签id", required = true, paramType = "path")
     @RequestMapping(value = "/{itemsId}", method = RequestMethod.DELETE)
     public ResponseResult getlist(@PathVariable String itemsId) {
         LOGGER.info("根据id删除评分项, 参数：{}", itemsId);
@@ -216,8 +210,9 @@ public class ItemsRest {
 
     @ApiOperation(value = "远程条件查询评分项表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "itemsName", value = "标签名称", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "itemsType", value = "标签类型", dataType = "Integer", paramType = "query")})
+            @ApiImplicitParam(name = "itemsName", value = "标签名称", paramType = "query"),
+            @ApiImplicitParam(name = "itemsType", value = "标签类型", paramType = "query", dataTypeClass = Integer.class)
+    })
     @RequestMapping(value = "/remotegetlist", method = RequestMethod.GET)
     public ResponseResult<List<Items>> remoteGetList(@RequestParam @ApiParam(hidden = true) Map<String, String> param) {
         LOGGER.info("远程条件查询评分项表, 参数：{}", JSONObject.toJSONString(param));
