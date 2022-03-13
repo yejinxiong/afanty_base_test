@@ -1,8 +1,8 @@
 package com.afanty.base.test.common.tree;
 
 
+import com.afanty.base.test.common.utils.BeanUtil;
 import com.google.common.collect.Lists;
-import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -61,26 +61,9 @@ public class TreeUtil {
      */
     public static <T> List<T> getRoots(List<T> dataList, String keyName, String parentKeyName) {
         // 获取所有的节点ID
-        List<String> allKeyValues = dataList.stream().map(data -> {
-            try {
-                return String.valueOf(BeanUtils.getProperty(data, keyName));
-            } catch (Exception e) {
-                LOGGER.error("获取节点[{}]的值异常：{}", keyName, e.getMessage());
-                return null;
-            }
-        }).collect(Collectors.toList());
+        List<String> allKeyValues = dataList.stream().map(data -> BeanUtil.getProperty(data, keyName)).collect(Collectors.toList());
         // 获取顶级节点
-        List<T> roots = dataList.stream().filter(data -> {
-            try {
-                return !allKeyValues.contains(BeanUtils.getProperty(data, parentKeyName));
-            } catch (Exception e) {
-                LOGGER.error("获取顶级节点[{}]的值异常：{}", parentKeyName, e.getMessage());
-                return false;
-            }
-        }).collect(Collectors.toList());
-        if (null == roots) {
-            roots = new ArrayList<>();
-        }
+        List<T> roots = dataList.stream().filter(data -> !allKeyValues.contains(BeanUtil.getProperty(data, parentKeyName))).collect(Collectors.toList());
         return roots;
     }
 
@@ -100,9 +83,9 @@ public class TreeUtil {
             for (T t : children) {
                 TreeNode childnode = new TreeNode();
                 // 获取当前节点的ID，作为子节点的父节点
-                String parentValue = BeanUtils.getProperty(t, keyName);
+                String parentValue = BeanUtil.getProperty(t, keyName);
                 childnode.setKey(parentValue);
-                childnode.setLabel(BeanUtils.getProperty(t, labelName));
+                childnode.setLabel(BeanUtil.getProperty(t, labelName));
                 // 获取当前节点的子节点集合
                 List<T> childlist = getChildren(dataList, parentKeyName, parentValue);
                 // 设置子节点
@@ -126,17 +109,7 @@ public class TreeUtil {
      * @return
      */
     public static <T> List<T> getChildren(List<T> dataList, String parentKeyName, String parentValue) {
-        List<T> children = dataList.stream().filter(data -> {
-            try {
-                return parentValue.equals(BeanUtils.getProperty(data, parentKeyName));
-            } catch (Exception e) {
-                LOGGER.error("获取父节点[{}]的值异常：{}", parentKeyName, e.getMessage());
-                return false;
-            }
-        }).collect(Collectors.toList());
-        if (null == children) {
-            children = new ArrayList<>();
-        }
+        List<T> children = dataList.stream().filter(data -> parentValue.equals(BeanUtil.getProperty(data, parentKeyName))).collect(Collectors.toList());
         return children;
     }
 
