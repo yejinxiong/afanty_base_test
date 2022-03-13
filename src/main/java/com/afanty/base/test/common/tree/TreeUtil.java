@@ -38,9 +38,10 @@ public class TreeUtil {
         Assert.notNull(parentKeyName, "父节点取值对所应的字段名不能为空！");
         Assert.notNull(labelName, "节点名称取值所对应的字段名不能为空！");
         List<TreeNode> treeNodeList = new ArrayList<>();
-        // 获取顶级节点
-        List<T> roots = getRoots(dataList, keyName, parentKeyName);
         try {
+            // 获取顶级节点
+            List<T> roots = getRoots(dataList, keyName, parentKeyName);
+            // 递归顶级节点
             recursionFn(dataList, roots, treeNodeList, keyName, parentKeyName, labelName);
         } catch (Exception e) {
             LOGGER.error("构建树异常：{}", e.getMessage());
@@ -64,7 +65,7 @@ public class TreeUtil {
             try {
                 return String.valueOf(BeanUtils.getProperty(data, keyName));
             } catch (Exception e) {
-                LOGGER.error("获取{}的值异常：{}", keyName, e.getMessage());
+                LOGGER.error("获取节点[{}]的值异常：{}", keyName, e.getMessage());
                 return null;
             }
         }).collect(Collectors.toList());
@@ -73,7 +74,7 @@ public class TreeUtil {
             try {
                 return !allKeyValues.contains(BeanUtils.getProperty(data, parentKeyName));
             } catch (Exception e) {
-                LOGGER.error("获取{}的值异常：{}", keyName, e.getMessage());
+                LOGGER.error("获取顶级节点[{}]的值异常：{}", parentKeyName, e.getMessage());
                 return false;
             }
         }).collect(Collectors.toList());
@@ -129,7 +130,7 @@ public class TreeUtil {
             try {
                 return parentValue.equals(BeanUtils.getProperty(data, parentKeyName));
             } catch (Exception e) {
-                LOGGER.error("获取{}的值异常：{}", parentKeyName, e.getMessage());
+                LOGGER.error("获取父节点[{}]的值异常：{}", parentKeyName, e.getMessage());
                 return false;
             }
         }).collect(Collectors.toList());
