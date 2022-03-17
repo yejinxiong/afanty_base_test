@@ -2,6 +2,7 @@ package com.afanty.base.test.system.codetype.rest;
 
 
 import com.afanty.base.test.common.annotation.NotNull;
+import com.afanty.base.test.common.exception.CustomException;
 import com.afanty.base.test.common.web.domain.ResponseResult;
 import com.afanty.base.test.common.web.domain.StatusCode;
 import com.afanty.base.test.system.codetype.entity.CodeType;
@@ -110,6 +111,17 @@ public class CodeTypeRest {
             LOGGER.error("新增字典类型异常：{}", e.getMessage());
             return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
         }
+    }
+
+    @ApiOperation(value = "全局异常拦截", notes = "由于CustomException在GlobalExceptionHandler中做了拦截，所以只要主动抛出CustomException即可，对于本异常不需要try-catch")
+    @PostMapping(value = "/globalexception")
+    public ResponseResult<List<CodeType>> globalException() {
+        Map<String, Object> param = new HashMap<>();
+        List<CodeType> list = codeTypeService.baseListQuery(param);
+        if (list.size() > 0) {
+            throw new CustomException("这里是全局异常拦截之自定义异常！");
+        }
+        return ResponseResult.success();
     }
 
 }
