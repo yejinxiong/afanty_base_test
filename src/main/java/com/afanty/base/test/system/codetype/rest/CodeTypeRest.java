@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -83,6 +84,27 @@ public class CodeTypeRest {
                     LOGGER.info("[{}] {}", typeCode, "操作完成");
                     return ResponseResult.auto(successFlag);
                 }
+            }
+        } catch (Exception e) {
+            LOGGER.error("新增字典类型异常：{}", e.getMessage());
+            return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
+        }
+    }
+
+    @ApiOperation(value = "手动回滚")
+    @PostMapping(value = "/manualrollback")
+    public ResponseResult manualrollback(CodeType codeType) {
+        String paramJson = JSONObject.toJSONString(codeType);
+        LOGGER.info("新增字典类型, 参数：{}", paramJson);
+        try {
+            boolean successFlag = codeTypeService.save(codeType);
+            // 判断操作数据库是否成功，不成功，则手动回滚
+            // 注意：如果写了全局异常拦截，这里也主动抛出异常了，则不需要手动回滚
+            if (!successFlag) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return ResponseResult.error(StatusCode.CODE_3000.getKey(), StatusCode.CODE_3000.getDesc());
+            } else {
+                return ResponseResult.success();
             }
         } catch (Exception e) {
             LOGGER.error("新增字典类型异常：{}", e.getMessage());
