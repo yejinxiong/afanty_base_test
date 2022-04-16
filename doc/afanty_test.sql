@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 127.0.0.1
+ Source Server         : 127.0.0.1-root-root
  Source Server Type    : MySQL
  Source Server Version : 80026
  Source Host           : 127.0.0.1:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 24/01/2022 01:40:29
+ Date: 16/04/2022 17:08:18
 */
 
 SET NAMES utf8mb4;
@@ -41,42 +41,50 @@ CREATE TABLE `tbl_qm_items`  (
   `update_user` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改人账号',
   `update_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改人姓名',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`items_id`) USING BTREE
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`items_id`) USING BTREE,
+  INDEX `IDX_LABEL_ID`(`items_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '评分项表存的个省自定义的评分项数据，\r\n读写，\r\n数据量：< 10000条' ROW_FORMAT = Dynamic;
 
-INSERT INTO `tbl_qm_items` VALUES ('01a4d6dd5ace4e1cbf56c31d3dd698a4', '372246facd174fa8a3cbe6a5b2992152', '获取租户', 7, 1, 0, 0, '测试3', NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-11 17:41:09', 'yejx', '叶金雄', '2020-03-11 17:41:09');
-INSERT INTO `tbl_qm_items` VALUES ('07d35201cf2a43468161f5792e615ff6', '1d4cd94950d34f3bb91744896ff38299', '吐字模糊，普通话不标准', 6, 1, 0, 0, '测试4', NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-12 14:31:55', 'yejx', '叶金雄', '2020-03-12 14:36:39');
-INSERT INTO `tbl_qm_items` VALUES ('1cb662ff70c3491f8d2a89e1ea6ab76a', '1d4cd94950d34f3bb91744896ff38299', '音量、语速不符合要求', 2, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-12 14:31:55', 'yejx', '叶金雄', '2020-03-12 14:36:39');
-INSERT INTO `tbl_qm_items` VALUES ('20dcc3bbf6254afa943c71cf518c201b', '2c91809f69110b43016927ebe76d000b', '奢侈', 34, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-10 18:57:57', 'yejx', '叶金雄', '2020-03-11 17:03:11');
-INSERT INTO `tbl_qm_items` VALUES ('210dd3063d7948e4ad5417d4e6534585', '1845c4a4eb054fbeb084c4e1cee8b6e1', '使用文明用语', 9, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-10 15:16:19', 'yejx', '叶金雄', '2020-03-10 16:25:27');
-INSERT INTO `tbl_qm_items` VALUES ('217092a5f1f9a7bcd2da2a19d5e5ffa2', 'd09e2062d8f445ba9ad45a0211786ab1', '谩骂客户', 10, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2021-04-24 23:07:23', 'yejx', '叶金雄', '2021-04-24 23:07:23');
-INSERT INTO `tbl_qm_items` VALUES ('28f48eaad77a4c2786003a2c1d080408', '42253a630d5243599c331ff8e72a35ea', '态度恶劣', 60, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41');
-INSERT INTO `tbl_qm_items` VALUES ('2c91808467ccc12601682ae89f9a000d', '8a7d8a906ce1e894016ce1f9a5a60002', '主动解决问题', 10, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-02-27 17:56:27', 'yejx', '叶金雄', '2020-02-27 17:56:34');
-INSERT INTO `tbl_qm_items` VALUES ('2f3e6a1ceeaf4ee29430c9b6f649dccd', '1d4cd94950d34f3bb91744896ff38299', '亲切、耐心，积极、主动', 4, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-12 14:31:55', 'yejx', '叶金雄', '2020-03-12 14:36:39');
-INSERT INTO `tbl_qm_items` VALUES ('380b848207bf4e91b4a490e464f5ddf4', '2c91809f69110b43016927ebe76d000b', '你个嘚嘚', 90, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-10 18:57:51', 'yejx', '叶金雄', '2020-03-11 17:03:11');
-INSERT INTO `tbl_qm_items` VALUES ('4aff2f7c9df245759fe7adb3a16622b6', '372246facd174fa8a3cbe6a5b2992152', '获取子公司', 8, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-11 17:41:09', 'yejx', '叶金雄', '2020-03-11 17:41:09');
-INSERT INTO `tbl_qm_items` VALUES ('4cb752dfe4ea46ccb3075d679298710s', '17056c068dcd4b5fbe7ff0c183c9262b', '使用不文明用语2', 5, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-02 23:38:36', 'yejx', '叶金雄', '2020-03-02 23:38:36');
-INSERT INTO `tbl_qm_items` VALUES ('50151b32f3ef4fe484fef4f75cd62e14', '45f634acad9744399d8995ffd8324d42', '未倾听并适当回应', 10, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-12 14:36:39', 'yejx', '叶金雄', '2020-03-12 14:36:39');
-INSERT INTO `tbl_qm_items` VALUES ('5d5918f6fa484296aae4a5fd85d5a3ca', '42253a630d5243599c331ff8e72a35ea', '礼貌用语', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41');
-INSERT INTO `tbl_qm_items` VALUES ('624e67ea8f7640eca8f0b691b2089670', 'a787aa61a33c4f3e80bb72a8f7a13a39', '使用不文明用语', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-03 14:55:21', 'yejx', '叶金雄', '2020-03-12 16:24:17');
-INSERT INTO `tbl_qm_items` VALUES ('7497b3119b854166bb60e471d314deb4', '17056c068dcd4b5fbe7ff0c183c9262b', '吧啦吧啦一大堆', 4, 0, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-02 23:38:36', 'yejx', '叶金雄', '2020-03-02 23:38:36');
-INSERT INTO `tbl_qm_items` VALUES ('7d38c3b915b64de98eb38cd0de02a805', '42253a630d5243599c331ff8e72a35ea', '善良的控股', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-09 15:28:50', 'yejx', '叶金雄', '2020-03-11 21:59:41');
-INSERT INTO `tbl_qm_items` VALUES ('8a7d844b6c9ae34c016c9af4a0da0000', '2c9180826bbb3243016bdbb14fbd0000', '业务不熟', 4, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-02-27 15:42:20', 'yejx', '叶金雄', '2020-02-27 15:42:23');
-INSERT INTO `tbl_qm_items` VALUES ('8a7d8a906ce1e894016ce1f72efa0001', '8a7d8a906ce1e894016ce1f9a5a60002', '吐字清晰，普通话标准', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-02-27 15:43:50', 'yejx', '叶金雄', '2020-02-27 15:43:52');
-INSERT INTO `tbl_qm_items` VALUES ('9d9e395890d74dcdbe07ff05efe3b196', '42253a630d5243599c331ff8e72a35ea', '我不听我不听', 41, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41');
-INSERT INTO `tbl_qm_items` VALUES ('9e424b02a2bd442bacbd65b19eca0c95', '151381e555274bf99f09cf3d6112cf63', '立刻搭街坊', 40, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-11 17:48:09', 'yejx', '叶金雄', '2020-03-12 16:45:11');
-INSERT INTO `tbl_qm_items` VALUES ('a9cfff9bae304fb2b829e0265a8c7735', '151381e555274bf99f09cf3d6112cf63', '收到反馈结果', 70, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-11 17:48:09', 'yejx', '叶金雄', '2020-03-12 16:45:11');
-INSERT INTO `tbl_qm_items` VALUES ('aa6e4c0dc39b48cdbe7d9a6254d41a94', '45f634acad9744399d8995ffd8324d42', '测试编辑', 30, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'KF45100000', '省分管理员', '2020-03-12 23:01:25', 'KF45100000', '省分管理员', '2020-03-12 23:05:33');
-INSERT INTO `tbl_qm_items` VALUES ('b254ca8ffe1186c0c2cd9c92dc877eac', '123', '获取租户1', 5, 2, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2022-01-22 06:16:00', 'yejx', '叶金雄', '2022-01-22 06:16:00');
-INSERT INTO `tbl_qm_items` VALUES ('b5bac06681d9443fb6895af05656b2c9', '45f634acad9744399d8995ffd8324d42', '测试时间 不必恐慌', 60, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'KF45100000', '省分管理员', '2020-03-12 23:05:33', 'KF45100000', '省分管理员', '2020-03-12 23:05:33');
-INSERT INTO `tbl_qm_items` VALUES ('bd4dacee85dd47f8917b6c8e24a28e67', '42253a630d5243599c331ff8e72a35ea', '口吐芬芳', 5, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41');
-INSERT INTO `tbl_qm_items` VALUES ('be4b79f17d3f480fa2879a9d59322ed0', '42253a630d5243599c331ff8e72a35ea', '嚣张跋扈，谩骂客户', 60, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41');
-INSERT INTO `tbl_qm_items` VALUES ('c54a4c02fe3e422db4b12217c7b4705f', 'a787aa61a33c4f3e80bb72a8f7a13a39', '吐词清晰，使用标准普通话', 5, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-03 14:55:21', 'yejx', '叶金雄', '2020-03-12 16:24:17');
-INSERT INTO `tbl_qm_items` VALUES ('cfe1eb06014e42ed82aa9bb8876df488', '45f634acad9744399d8995ffd8324d42', '你愁啥', 50, 0, 0, 1, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'KF45100000', '省分管理员', '2020-03-12 23:05:33', 'KF45100000', '省分管理员', '2020-03-12 23:05:33');
-INSERT INTO `tbl_qm_items` VALUES ('db1c55c09f013e3410546482679111b0', '12345678', '业务能力薄弱', 10, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2021-04-23 21:41:18', 'yejx', '叶金雄', '2021-04-23 21:41:18');
-INSERT INTO `tbl_qm_items` VALUES ('dd86d40b1c75402fafd815fc7569c99b', 'a787aa61a33c4f3e80bb72a8f7a13a39', '灵活运用', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-03 14:55:21', 'yejx', '叶金雄', '2020-03-12 16:24:17');
-INSERT INTO `tbl_qm_items` VALUES ('f82b663b765f64d41771f4f7d72d38a2', 'fcefdbf3e5e3497f923b966f759cde71', '服务态度友好', 10, 0, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2021-04-23 21:37:18', 'yejx', '叶金雄', '2021-04-23 21:37:18');
-
+-- ----------------------------
+-- Records of tbl_qm_items
+-- ----------------------------
+INSERT INTO `tbl_qm_items` VALUES ('01a4d6dd5ace4e1cbf56c31d3dd698a4', '372246facd174fa8a3cbe6a5b2992152', '获取租户', 7, 1, 0, 0, '测试3', NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-11 17:41:09', 'yejx', '叶金雄', '2020-03-11 17:41:09', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('07d35201cf2a43468161f5792e615ff6', '1d4cd94950d34f3bb91744896ff38299', '吐字模糊，普通话不标准', 6, 1, 0, 0, '测试4', NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-12 14:31:55', 'yejx', '叶金雄', '2020-03-12 14:36:39', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('1b218aa6c894965ae6d0a19ac5b7ce65', '1', '==========', 12, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'planing', 'yejx', '叶金雄', '2022-02-16 14:54:29', 'yejx', '叶金雄', '2022-02-16 15:06:07', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('1cb662ff70c3491f8d2a89e1ea6ab76a', '1d4cd94950d34f3bb91744896ff38299', '音量、语速不符合要求', 2, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-12 14:31:55', 'yejx', '叶金雄', '2020-03-12 14:36:39', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('20dcc3bbf6254afa943c71cf518c201b', '2c91809f69110b43016927ebe76d000b', '奢侈', 34, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-10 18:57:57', 'yejx', '叶金雄', '2020-03-11 17:03:11', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('210dd3063d7948e4ad5417d4e6534585', '1845c4a4eb054fbeb084c4e1cee8b6e1', '使用文明用语', 9, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-10 15:16:19', 'yejx', '叶金雄', '2020-03-10 16:25:27', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('217092a5f1f9a7bcd2da2a19d5e5ffa2', 'd09e2062d8f445ba9ad45a0211786ab1', '谩骂客户', 10, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2021-04-24 23:07:23', 'yejx', '叶金雄', '2021-04-24 23:07:23', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('28f48eaad77a4c2786003a2c1d080408', '42253a630d5243599c331ff8e72a35ea', '态度恶劣', 60, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('2c91808467ccc12601682ae89f9a000d', '8a7d8a906ce1e894016ce1f9a5a60002', '主动解决问题', 10, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-02-27 17:56:27', 'yejx', '叶金雄', '2020-02-27 17:56:34', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('2f3e6a1ceeaf4ee29430c9b6f649dccd', '1d4cd94950d34f3bb91744896ff38299', '亲切、耐心，积极、主动', 4, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-12 14:31:55', 'yejx', '叶金雄', '2020-03-12 14:36:39', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('380b848207bf4e91b4a490e464f5ddf4', '2c91809f69110b43016927ebe76d000b', '你个嘚嘚', 90, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-10 18:57:51', 'yejx', '叶金雄', '2020-03-11 17:03:11', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('41853bd8fd4199032675d37a41ffd4aa', NULL, NULL, 6, NULL, NULL, NULL, '/afanty_base_test/2022/04/16/logo-透明-草稿-20220416170701691.png', NULL, NULL, 'AFANTY', 'xlm', NULL, 'yejx', '叶金雄', '2022-04-16 09:07:02', NULL, NULL, NULL, '上传文件至ftp');
+INSERT INTO `tbl_qm_items` VALUES ('4aff2f7c9df245759fe7adb3a16622b6', '372246facd174fa8a3cbe6a5b2992152', '获取子公司', 8, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-11 17:41:09', 'yejx', '叶金雄', '2020-03-11 17:41:09', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('4cb752dfe4ea46ccb3075d679298710s', '17056c068dcd4b5fbe7ff0c183c9262b', '使用不文明用语2', 5, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-02 23:38:36', 'yejx', '叶金雄', '2020-03-02 23:38:36', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('50151b32f3ef4fe484fef4f75cd62e14', '45f634acad9744399d8995ffd8324d42', '未倾听并适当回应', 10, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-12 14:36:39', 'yejx', '叶金雄', '2020-03-12 14:36:39', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('5d5918f6fa484296aae4a5fd85d5a3ca', '42253a630d5243599c331ff8e72a35ea', '礼貌用语', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('5e63ac6577d8db8d4beebf132812135c', NULL, NULL, 6, NULL, NULL, NULL, '/afanty_base_test/2022/04/16/logo-透明-草稿-20220416170453440.png', NULL, NULL, 'AFANTY', 'xlm', NULL, 'yejx', '叶金雄', '2022-04-16 09:04:54', NULL, NULL, NULL, '上传文件至ftp');
+INSERT INTO `tbl_qm_items` VALUES ('624e67ea8f7640eca8f0b691b2089670', 'a787aa61a33c4f3e80bb72a8f7a13a39', '使用不文明用语', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-03 14:55:21', 'yejx', '叶金雄', '2020-03-12 16:24:17', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('7497b3119b854166bb60e471d314deb4', '17056c068dcd4b5fbe7ff0c183c9262b', '吧啦吧啦一大堆', 4, 0, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-02 23:38:36', 'yejx', '叶金雄', '2020-03-02 23:38:36', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('7d38c3b915b64de98eb38cd0de02a805', '42253a630d5243599c331ff8e72a35ea', '善良的控股', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-09 15:28:50', 'yejx', '叶金雄', '2020-03-11 21:59:41', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('8a7d844b6c9ae34c016c9af4a0da0000', '2c9180826bbb3243016bdbb14fbd0000', '业务不熟', 4, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-02-27 15:42:20', 'yejx', '叶金雄', '2020-02-27 15:42:23', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('8a7d8a906ce1e894016ce1f72efa0001', '8a7d8a906ce1e894016ce1f9a5a60002', '吐字清晰，普通话标准', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-02-27 15:43:50', 'yejx', '叶金雄', '2020-02-27 15:43:52', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('9d9e395890d74dcdbe07ff05efe3b196', '42253a630d5243599c331ff8e72a35ea', '我不听我不听', 41, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('9e424b02a2bd442bacbd65b19eca0c95', '151381e555274bf99f09cf3d6112cf63', '立刻搭街坊', 40, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-11 17:48:09', 'yejx', '叶金雄', '2020-03-12 16:45:11', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('a9cfff9bae304fb2b829e0265a8c7735', '151381e555274bf99f09cf3d6112cf63', '收到反馈结果', 70, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-11 17:48:09', 'yejx', '叶金雄', '2020-03-12 16:45:11', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('aa6e4c0dc39b48cdbe7d9a6254d41a94', '45f634acad9744399d8995ffd8324d42', '测试编辑', 30, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'KF45100000', '省分管理员', '2020-03-12 23:01:25', 'KF45100000', '省分管理员', '2020-03-12 23:05:33', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('b254ca8ffe1186c0c2cd9c92dc877eac', '123', '获取租户1', 5, 2, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2022-01-22 06:16:00', 'yejx', '叶金雄', '2022-01-22 06:16:00', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('b5bac06681d9443fb6895af05656b2c9', '45f634acad9744399d8995ffd8324d42', '测试时间 不必恐慌', 60, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'KF45100000', '省分管理员', '2020-03-12 23:05:33', 'KF45100000', '省分管理员', '2020-03-12 23:05:33', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('bd4dacee85dd47f8917b6c8e24a28e67', '42253a630d5243599c331ff8e72a35ea', '口吐芬芳', 5, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('be4b79f17d3f480fa2879a9d59322ed0', '42253a630d5243599c331ff8e72a35ea', '嚣张跋扈，谩骂客户', 60, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-04 17:07:38', 'yejx', '叶金雄', '2020-03-11 21:59:41', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('c54a4c02fe3e422db4b12217c7b4705f', 'a787aa61a33c4f3e80bb72a8f7a13a39', '吐词清晰，使用标准普通话', 5, 1, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-03 14:55:21', 'yejx', '叶金雄', '2020-03-12 16:24:17', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('cfe1eb06014e42ed82aa9bb8876df488', '45f634acad9744399d8995ffd8324d42', '你愁啥', 50, 0, 0, 1, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'KF45100000', '省分管理员', '2020-03-12 23:05:33', 'KF45100000', '省分管理员', '2020-03-12 23:05:33', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('d7fb52776c271484893818d15d59a370', NULL, NULL, 6, NULL, NULL, NULL, '\\afanty_base_test\\2022\\04\\16\\logo-透明-草稿-20220416163347652.png', NULL, NULL, 'AFANTY', 'xlm', NULL, 'yejx', '叶金雄', '2022-04-16 08:33:48', NULL, NULL, NULL, '上传文件至ftp');
+INSERT INTO `tbl_qm_items` VALUES ('db1c55c09f013e3410546482679111b0', '12345678', '业务能力薄弱', 10, 1, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2021-04-23 21:41:18', 'yejx', '叶金雄', '2021-04-23 21:41:18', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('dd86d40b1c75402fafd815fc7569c99b', 'a787aa61a33c4f3e80bb72a8f7a13a39', '灵活运用', 5, 0, 0, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2020-03-03 14:55:21', 'yejx', '叶金雄', '2020-03-12 16:24:17', NULL);
+INSERT INTO `tbl_qm_items` VALUES ('f82b663b765f64d41771f4f7d72d38a2', 'fcefdbf3e5e3497f923b966f759cde71', '服务态度友好', 10, 0, 1, 0, NULL, NULL, NULL, 'AFANTY', 'xlm', 'development', 'yejx', '叶金雄', '2021-04-23 21:37:18', 'yejx', '叶金雄', '2021-04-23 21:37:18', NULL);
 
 -- ----------------------------
 -- Table structure for tbl_sys_code_type
@@ -99,10 +107,53 @@ CREATE TABLE `tbl_sys_code_type`  (
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `IDX_TYPE_CODE_DICT_OR_TREE`(`type_code`, `dict_or_tree`) USING BTREE COMMENT '联合索引：类型编码-字典还是树形'
-) ENGINE = InnoDB AUTO_INCREMENT = 1485171234608574466 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典类型' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1493972064820391938 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典类型' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Records of tbl_sys_code_type
+-- ----------------------------
 INSERT INTO `tbl_sys_code_type` VALUES (1482761104411631618, 'DICT_SYS_SEX', '性别', '系统公用性别', 1, NULL, 0, 1, 'yejx', '叶金雄', '2022-01-23 16:42:30', 'yejx', '叶金雄', '2022-01-23 16:42:30');
+INSERT INTO `tbl_sys_code_type` VALUES (1493972064820391938, 'CODE_SHEET_TYPE', '工单类型', '工单类型', 2, NULL, 0, 1, 'yejx', '叶金雄', '2022-02-16 15:34:32', NULL, NULL, NULL);
 
+-- ----------------------------
+-- Table structure for tbl_sys_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_sys_dept`;
+CREATE TABLE `tbl_sys_dept`  (
+  `dept_id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '部门id',
+  `d_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据唯一uuid',
+  `parent_id` bigint(0) NULL DEFAULT 0 COMMENT '父部门id',
+  `ancestors` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '祖级列表',
+  `dept_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '部门名称',
+  `order_num` int(0) NULL DEFAULT 0 COMMENT '显示顺序',
+  `leader` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '负责人',
+  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '联系电话',
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '部门状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `create_by` bigint(0) NULL DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` bigint(0) NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`dept_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tbl_sys_dept
+-- ----------------------------
+INSERT INTO `tbl_sys_dept` VALUES (100, NULL, 0, '0', '若依科技', 0, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (101, NULL, 100, '0,100', '深圳总公司', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (102, NULL, 100, '0,100', '长沙分公司', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (103, NULL, 101, '0,100,101', '研发部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (104, NULL, 101, '0,100,101', '市场部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (105, NULL, 101, '0,100,101', '测试部门', 3, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (106, NULL, 101, '0,100,101', '财务部门', 4, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (107, NULL, 101, '0,100,101', '运维部门', 5, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (108, NULL, 102, '0,100,102', '市场部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (109, NULL, 102, '0,100,102', '财务部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (200, NULL, 100, '0,100', '武汉分公司', 3, '林凡', '17671667711', 'linfan@afanty.com', '0', '0', NULL, '2022-02-27 17:24:47', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (201, NULL, 200, '0,100,200', '软件事业部', 1, '冷锋', NULL, NULL, '0', '0', NULL, '2022-02-27 17:29:33', NULL, NULL);
+INSERT INTO `tbl_sys_dept` VALUES (202, NULL, 200, '0,100,200', '硬件事业部', 2, '高琪', NULL, NULL, '0', '0', NULL, '2022-02-27 17:30:35', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tbl_sys_dict
@@ -127,53 +178,15 @@ CREATE TABLE `tbl_sys_dict`  (
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `IDX_DICT_VALUE_TYPE_CODE`(`dict_value`, `type_code`) USING BTREE COMMENT '联合索引：字典值-类型编码',
-  INDEX `IDX_DICT_NAME`(`dict_name`) USING BTREE COMMENT '字典名称'
-) ENGINE = InnoDB AUTO_INCREMENT = 1483113287258763266 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典表' ROW_FORMAT = Dynamic;
+  INDEX `IDX_DICT_NAME`(`dict_name`) USING BTREE COMMENT '字典名称',
+  INDEX `IDX_ID`(`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典表' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Records of tbl_sys_dict
+-- ----------------------------
 INSERT INTO `tbl_sys_dict` VALUES (1483108408695996417, '男', '1', 'DIC_SYS_SEX', '男', 'n', 1, '性别男', 2, 1, 'yejx', '叶金雄', '2022-01-18 00:23:51', 'yejx', '叶金雄', '2022-01-18 00:23:51');
 INSERT INTO `tbl_sys_dict` VALUES (1483113287258763265, '女', '2', 'DIC_SYS_SEX', '女', 'n', 2, '性别女', 2, 1, 'yejx', '叶金雄', '2022-01-17 16:25:37', 'yejx', '叶金雄', '2022-01-17 16:25:37');
-
-
--- ----------------------------
--- Table structure for tbl_sys_dept
--- ----------------------------
-DROP TABLE IF EXISTS `tbl_sys_dept`;
-CREATE TABLE `tbl_sys_dept`  (
-  `dept_id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '部门id',
-  `d_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据唯一uuid',
-  `parent_id` bigint(0) NULL DEFAULT 0 COMMENT '父部门id',
-  `ancestors` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '祖级列表',
-  `dept_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '部门名称',
-  `order_num` int(0) NULL DEFAULT 0 COMMENT '显示顺序',
-  `leader` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '负责人',
-  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '联系电话',
-  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '部门状态（0正常 1停用）',
-  `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
-  `create_by` bigint(0) NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_by` bigint(0) NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`dept_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 203 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of tbl_sys_dept
--- ----------------------------
-INSERT INTO `tbl_sys_dept` VALUES (100, NULL, 0, '0', '若依科技', 0, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (101, NULL, 100, '0,100', '深圳总公司', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (102, NULL, 100, '0,100', '长沙分公司', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (103, NULL, 101, '0,100,101', '研发部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (104, NULL, 101, '0,100,101', '市场部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (105, NULL, 101, '0,100,101', '测试部门', 3, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (106, NULL, 101, '0,100,101', '财务部门', 4, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (107, NULL, 101, '0,100,101', '运维部门', 5, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (108, NULL, 102, '0,100,102', '市场部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (109, NULL, 102, '0,100,102', '财务部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', NULL, '2022-02-20 15:10:57', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (200, NULL, 100, '0,100', '武汉分公司', 3, '林凡', '17671667711', 'linfan@afanty.com', '0', '0', NULL, '2022-02-27 17:24:47', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (201, NULL, 200, '0,100,200', '软件事业部', 1, '冷锋', NULL, NULL, '0', '0', NULL, '2022-02-27 17:29:33', NULL, NULL);
-INSERT INTO `tbl_sys_dept` VALUES (202, NULL, 200, '0,100,200', '硬件事业部', 2, '高琪', NULL, NULL, '0', '0', NULL, '2022-02-27 17:30:35', NULL, NULL);
-
 
 -- ----------------------------
 -- Table structure for tbl_sys_menu
@@ -201,7 +214,7 @@ CREATE TABLE `tbl_sys_menu`  (
   `update_by` bigint(0) NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2000 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_sys_menu
@@ -290,7 +303,6 @@ INSERT INTO `tbl_sys_menu` VALUES (1058, '0aae531d8b7a8d9639803ed388fc47c7', '�
 INSERT INTO `tbl_sys_menu` VALUES (1059, '2c2213a4a42d45639e56ffa75a74b237', '预览代码', 115, 4, '#', '', '', 1, 0, 'F', 0, 0, 'tool:gen:preview', '#', '', NULL, '2022-02-20 15:10:58', NULL, NULL);
 INSERT INTO `tbl_sys_menu` VALUES (1060, '16b8af0f85c9fe63eccc2bd55418a945', '生成代码', 115, 5, '#', '', '', 1, 0, 'F', 0, 0, 'tool:gen:code', '#', '', NULL, '2022-02-20 15:10:58', NULL, NULL);
 
-
 -- ----------------------------
 -- Procedure structure for auto_insert_tbl_qm_label
 -- ----------------------------
@@ -307,6 +319,45 @@ END
 ;;
 delimiter ;
 
+-- ----------------------------
+-- Procedure structure for auto_insert_tbl_sys_dict_large
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `auto_insert_tbl_sys_dict_large`;
+delimiter ;;
+CREATE PROCEDURE `auto_insert_tbl_sys_dict_large`()
+BEGIN
+	DECLARE
+		-- 从1开始计数
+		i INT DEFAULT 1;
+		-- 插入sql，指定字段
+		SET @execSql = 'INSERT INTO `afanty_test`.`tbl_sys_dict_large`(`id`, `dict_name`, `dict_value`, `type_code`, `create_user`, `create_name`, `create_time`) VALUES';
+		-- 指定字段的值
+		SET @execData = '';
+	-- 生成500万条数据
+	WHILE i <= 5000000 DO
+		-- 动态生成字典名称
+		SET @dictName = concat( '字典', i );
+		-- 拼接插入语句的values部分
+		SET @execData = concat( @execData, "(", i, ", '", @dictName, "', '2', 'DICT_BUS_TYPE', ", "'yejx', '叶金雄', '", CURRENT_TIMESTAMP, "')" );
+		-- 每1000条数据提交一次
+		IF i % 1000 = 0
+		THEN
+			-- 提交数据，并清空插入语句的values部分
+			SET @stmtSql = concat( @execSql, @execData, ";" );
+			PREPARE stmt FROM @stmtSql;
+			EXECUTE stmt;
+			DEALLOCATE PREPARE stmt;
+			COMMIT;
+			SET @execData = "";
+		ELSE 
+			-- 拼接插入语句的values部分
+			SET @execData = concat( @execData, "," );
+		END IF;
+		SET i = i + 1;
+	END WHILE;
+END
+;;
+delimiter ;
 
 -- ----------------------------
 -- Triggers structure for table tbl_sys_dept
@@ -316,7 +367,6 @@ delimiter ;;
 CREATE TRIGGER `dkey_trigger_tbl_sys_dept` BEFORE INSERT ON `tbl_sys_dept` FOR EACH ROW begin set new.d_key = md5(uuid()); end
 ;;
 delimiter ;
-
 
 -- ----------------------------
 -- Triggers structure for table tbl_sys_menu

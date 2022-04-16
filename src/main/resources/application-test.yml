@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/afanty_test?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&rewriteBatchedStatements=true
+    url: jdbc:mysql://192.168.1.4:3306/afanty_test?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&rewriteBatchedStatements=true
     username: root
     password: root
 
@@ -19,4 +19,10 @@ zookeeper:
   cluster: 192.168.30.101:2181,192.168.30.102:2181,192.168.30.103:2181
   timeout: 4000
 
+# FTP
+ftp:
+  host: 192.168.30.101
+  port: 21
+  account: ftpuser
+  password: ftpuser
 

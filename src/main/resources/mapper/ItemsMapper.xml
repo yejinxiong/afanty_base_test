@@ -16,6 +16,7 @@
         <result column="tenant_id" property="tenantId" jdbcType="VARCHAR"/>
         <result column="pro_id" property="proId" jdbcType="VARCHAR"/>
         <result column="org_id" property="orgId" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
         <result column="create_name" property="createName" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -59,6 +60,9 @@
         </if>
         <if test="field3!=null and field3!=''">
             AND field3 = #{field3}
+        </if>
+        <if test="remark!=null and remark!=''">
+            AND remark like concat('%',#{remark},'%')
         </if>
         <if test="createUser!=null and createUser!=''">
             AND create_user = #{createUser}
@@ -108,6 +112,7 @@
         t.tenant_id,
         t.pro_id,
         t.org_id,
+        t.remark,
         t.create_user,
         t.create_name,
         t.create_time,

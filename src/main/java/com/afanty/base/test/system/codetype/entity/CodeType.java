@@ -47,10 +47,6 @@ public class CodeType extends BaseEntity implements Serializable {
     @TableField("dict_or_tree")
     private Integer dictOrTree;
 
-    @ApiModelProperty("备注")
-    @TableField("remark")
-    private String remark;
-
     @ApiModelProperty("是否删除：1-是，0-否（默认）")
     @TableField("delete_flag")
     @TableLogic

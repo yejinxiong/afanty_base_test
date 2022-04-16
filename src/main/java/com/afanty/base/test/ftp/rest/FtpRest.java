@@ -1,23 +1,20 @@
 package com.afanty.base.test.ftp.rest;
 
+import com.afanty.base.test.business.items.entity.Items;
+import com.afanty.base.test.business.items.service.ItemsServiceImpl;
 import com.afanty.base.test.common.web.domain.ResponseResult;
 import com.afanty.base.test.common.web.domain.StatusCode;
 import com.afanty.base.test.ftp.entity.Contact;
 import com.afanty.base.test.ftp.entity.ContactDir;
 import com.afanty.base.test.ftp.service.FtpServiceImpl;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
@@ -25,7 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>
@@ -52,6 +51,9 @@ public class FtpRest {
 
     @Resource(name = "ftpService")
     private FtpServiceImpl ftpService;
+
+    @Resource(name = "itemsServiceImpl")
+    private ItemsServiceImpl itemsService;
 
     @Value("${ftpServer.saveDir}")
     private String saveDir;
@@ -153,6 +155,19 @@ public class FtpRest {
                 }
             }
         }
+    }
+
+    @ApiOperation(value = "上传文件至ftp", notes = "上传文件至ftp")
+    @PostMapping("/upload")
+    public ResponseResult upload2FTP(Items items, @RequestPart MultipartFile file) throws Exception {
+        Map<String, String> resultMap = ftpService.upload2FTP(file);
+        if (Objects.nonNull(resultMap)) {
+            items.setField1(MapUtils.getString(resultMap, "url", null));
+            items.setRemark("上传文件至ftp");
+            items.setCreateTime(LocalDateTime.now());
+            itemsService.save(items);
+        }
+        return ResponseResult.success(resultMap);
     }
 
 }

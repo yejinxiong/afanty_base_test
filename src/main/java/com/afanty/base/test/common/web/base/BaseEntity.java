@@ -16,24 +16,21 @@ import java.time.LocalDateTime;
 @Data
 public class BaseEntity {
 
-    /**
-     * 创建人账号
-     */
+    @ApiModelProperty(value = "备注")
+    @TableField(value = "remark")
+    private String remark;
+
     @ApiModelProperty(value = "创建人账号")
     // 结合EntityInterceptor使用，自动为该字段填充值
     @TableField(value = "create_user", fill = FieldFill.INSERT)
     private String createUser;
 
-    /**
-     * 创建人姓名
-     */
     @ApiModelProperty(value = "创建人姓名")
     // 结合EntityInterceptor使用，自动为该字段填充值
     @TableField(value = "create_name", fill = FieldFill.INSERT)
     private String createName;
 
     /**
-     * 创建时间
      * 如果有LocalDateFormatConfig，则不用加@JsonFormat和@DateTimeFormat
      */
     @ApiModelProperty(value = "创建时间")
@@ -44,24 +41,17 @@ public class BaseEntity {
 //    private Date createTime;
     private LocalDateTime createTime;
 
-    /**
-     * 修改人账号
-     */
     @ApiModelProperty(value = "修改人账号")
     // 结合EntityInterceptor使用，自动为该字段填充值
     @TableField(value = "update_user", fill = FieldFill.UPDATE)
     private String updateUser;
 
-    /**
-     * 修改人姓名
-     */
     @ApiModelProperty(value = "修改人姓名")
     // 结合EntityInterceptor使用，自动为该字段填充值
     @TableField(value = "update_name", fill = FieldFill.UPDATE)
     private String updateName;
 
     /**
-     * 修改时间
      * 如果有LocalDateFormatConfig，则不用加@JsonFormat和@DateTimeFormat
      */
     @ApiModelProperty(value = "修改时间")

@@ -19,4 +19,11 @@ zookeeper:
   cluster: 192.168.30.101:2181,192.168.30.102:2181,192.168.30.103:2181
   timeout: 4000
 
+# FTP
+ftp:
+  host: 192.168.30.101
+  port: 21
+  account: ftpuser
+  password: ftpuser
+
 
