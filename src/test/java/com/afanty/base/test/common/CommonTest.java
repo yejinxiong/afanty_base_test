@@ -57,9 +57,11 @@ public class CommonTest {
      */
     @Test
     public void generateId3() {
-        UUID uuid = UUID.randomUUID();
-        String id = uuid.toString().replace("-", "");
-        System.out.println(id);
+        for (int i = 0; i < 20; i++) {
+            UUID uuid = UUID.randomUUID();
+            String id = uuid.toString().replace("-", "");
+            System.out.println(id);
+        }
     }
 
     /**
@@ -437,6 +439,31 @@ public class CommonTest {
         } catch (UnsupportedEncodingException e) {
             logger.error("转码/解码异常：{}", e.getMessage());
         }
+    }
+
+    /**
+     * 分组：根据集合实体某个字段的首个字符分组
+     */
+    @Test
+    public void testGroupByFirstLetter() {
+        List<Employee> listUser = new ArrayList<Employee>() {
+            {
+                this.add(new Employee("Smith", 23, 5000.00));
+                this.add(new Employee("Alen", 18, 4000.00));
+                this.add(new Employee("Jack", 23, 6000.00));
+                this.add(new Employee("李四", 25, 7000.00));
+            }
+        };
+        Map<String, List<Employee>> map = listUser.stream().collect(Collectors.groupingBy(u -> {
+            String firstLetter = u.getName().substring(0, 1).toUpperCase();
+            // 首个字符如果为字母A-Z，则分到相应字母分组，反之全部归为#分组
+            if (firstLetter.matches("[A-Z]")) {
+                return firstLetter;
+            } else {
+                return "#";
+            }
+        }, LinkedHashMap::new, Collectors.toList()));
+        System.out.println(map);
     }
 
 }
